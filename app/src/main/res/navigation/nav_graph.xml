@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="uk.ac.aston.cs3mdd.bottom_navigation.HomeFragment"
+        android:title="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_places"
+        android:name="uk.ac.aston.cs3mdd.bottom_navigation.PlacesFragment"
+        android:title="@string/title_places"
+        tools:layout="@layout/fragment_places" />
+
+    <fragment
+        android:id="@+id/navigation_weather"
+        android:name="uk.ac.aston.cs3mdd.bottom_navigation.WeatherFragment"
+        android:title="@string/title_weather"
+        tools:layout="@layout/fragment_weather" />
+
+    <fragment
+        android:id="@+id/navigation_news"
+        android:name="uk.ac.aston.cs3mdd.bottom_navigation.NewsFragment"
+        android:title="@string/title_news"
+        tools:layout="@layout/fragment_news" />
+
+
+
+
+
+</navigation>

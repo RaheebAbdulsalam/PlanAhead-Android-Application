@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PlanAhead App</string>
+    <string name="title_home">Home</string>
+    <string name="title_weather">Weather</string>
+    <string name="title_news">News</string>
+    <string name="title_places">Places</string>
+
+    <string name="add">Add Button</string>
+</resources>
