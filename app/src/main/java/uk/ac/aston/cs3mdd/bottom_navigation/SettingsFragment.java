@@ -7,20 +7,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import uk.ac.aston.cs3mdd.bottom_navigation.databinding.FragmentSettingsBinding;
 
-import uk.ac.aston.cs3mdd.bottom_navigation.databinding.FragmentNewsBinding;
-import uk.ac.aston.cs3mdd.bottom_navigation.databinding.FragmentPlacesBinding;
-import uk.ac.aston.cs3mdd.bottom_navigation.databinding.FragmentWeatherBinding;
-
-public class WeatherFragment extends Fragment {
-    private FragmentWeatherBinding binding;
+public class SettingsFragment extends Fragment {
+    private FragmentSettingsBinding binding;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentWeatherBinding.inflate(inflater, container, false);
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -36,3 +33,4 @@ public class WeatherFragment extends Fragment {
     }
 
 }
+

@@ -13,11 +13,11 @@
     <item android:id="@+id/placeholder"
         android:title="" />
 
-    <item android:id="@+id/navigation_weather"
-        android:title="@string/title_weather"
-        android:icon="@drawable/ic_weather" />
+    <item android:id="@+id/navigation_map"
+        android:title="@string/title_map"
+        android:icon="@drawable/ic_map" />
 
-    <item android:id="@+id/navigation_news"
-        android:title="@string/title_news"
-        android:icon="@drawable/ic_news" />
+    <item android:id="@+id/navigation_settings"
+        android:title="@string/title_settings"
+        android:icon="@drawable/ic_settings" />
 </menu>

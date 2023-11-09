@@ -18,16 +18,16 @@
         tools:layout="@layout/fragment_places" />
 
     <fragment
-        android:id="@+id/navigation_weather"
-        android:name="uk.ac.aston.cs3mdd.bottom_navigation.WeatherFragment"
-        android:title="@string/title_weather"
-        tools:layout="@layout/fragment_weather" />
+        android:id="@+id/navigation_map"
+        android:name="uk.ac.aston.cs3mdd.bottom_navigation.MapFragment"
+        android:title="@string/title_map"
+        tools:layout="@layout/fragment_map" />
 
     <fragment
-        android:id="@+id/navigation_news"
-        android:name="uk.ac.aston.cs3mdd.bottom_navigation.NewsFragment"
-        android:title="@string/title_news"
-        tools:layout="@layout/fragment_news" />
+        android:id="@+id/navigation_settings"
+        android:name="uk.ac.aston.cs3mdd.bottom_navigation.SettingsFragment"
+        android:title="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
 
 
 
