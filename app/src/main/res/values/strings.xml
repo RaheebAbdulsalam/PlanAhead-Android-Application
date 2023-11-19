@@ -1,9 +1,17 @@
 <resources>
-    <string name="app_name">PlanAhead App</string>
+    <string name="app_name">My App</string>
     <string name="title_home">Home</string>
     <string name="title_map">Map</string>
     <string name="title_settings">Settings</string>
     <string name="title_places">Places</string>
+    <string name="title_addEvent">Add An Event</string>
 
     <string name="add">Add Button</string>
+
+    <string name="event_date_time_format">%s %s</string>
+
+    <string name="event_location_format">%s</string>
+
+    <string name="map_description">Map view for displaying location information</string>
+
 </resources>

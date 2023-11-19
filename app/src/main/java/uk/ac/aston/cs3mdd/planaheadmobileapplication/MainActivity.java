@@ -1,13 +1,15 @@
-package uk.ac.aston.cs3mdd.bottom_navigation;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication;
+
 
 import static com.google.android.gms.location.Priority.PRIORITY_BALANCED_POWER_ACCURACY;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-
+import android.view.View;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +19,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -25,35 +27,28 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import uk.ac.aston.cs3mdd.bottom_navigation.databinding.ActivityMainBinding;
-import uk.ac.aston.cs3mdd.bottom_navigation.model.LocationViewModel;
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.ActivityMainBinding;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.AddEventActivity;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
 public class MainActivity extends AppCompatActivity {
-
     private ActivityMainBinding binding;
     private BottomNavigationView bottomNavigationView;
-
     public static final String TAG = "MYTAG";
-
-    private FusedLocationProviderClient fusedLocationClient;
-
     private LocationViewModel model;
-
+    private FusedLocationProviderClient fusedLocationClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
+    private FloatingActionButton add_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
+        //Bottom Navigation
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_map, R.id.navigation_places, R.id.navigation_settings)
                 .build();
@@ -61,8 +56,22 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
 
+
+        // FloatingActionButton to add an Event
+        add_button = findViewById(R.id.add);
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Navigate to AddEventFragment when FloatingActionButton is clicked
+                Intent intent = new Intent(MainActivity.this, AddEventActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 //----------------------------------------------------------------------------------------------------------------//
 // The following code is all about Getting the device location (GPS)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         model = new ViewModelProvider(this).get(LocationViewModel.class);
         //Adding location permission
         if (ActivityCompat.checkSelfPermission(this,
@@ -77,15 +86,15 @@ public class MainActivity extends AppCompatActivity {
                                         android.Manifest.permission.ACCESS_FINE_LOCATION, false);
                                 Boolean coarseLocationGranted = result.getOrDefault(
                                         android.Manifest.permission.ACCESS_COARSE_LOCATION, false);
-                        if (fineLocationGranted != null && fineLocationGranted) {
-                            Log.i(TAG, "Precise location access granted.");
-                            getLastLocation();
-                        } else if (coarseLocationGranted != null && coarseLocationGranted) {
-                            Log.i(TAG, "Only approximate location access granted.");
-                            getLastLocation();
-                        } else {
-                            Log.i(TAG, "No location access granted.");
-                        }
+                                if (fineLocationGranted != null && fineLocationGranted) {
+                                    Log.i(TAG, "Precise location access granted.");
+                                    getLastLocation();
+                                } else if (coarseLocationGranted != null && coarseLocationGranted) {
+                                    Log.i(TAG, "Only approximate location access granted.");
+                                    getLastLocation();
+                                } else {
+                                    Log.i(TAG, "No location access granted.");
+                                }
                             }
                     );
 

@@ -1,4 +1,5 @@
-package uk.ac.aston.cs3mdd.bottom_navigation;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication;
+
 
 import android.location.Address;
 import android.location.Geocoder;
@@ -7,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,9 +21,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import uk.ac.aston.cs3mdd.bottom_navigation.databinding.FragmentHomeBinding;
-import uk.ac.aston.cs3mdd.bottom_navigation.databinding.FragmentPlacesBinding;
-import uk.ac.aston.cs3mdd.bottom_navigation.model.LocationViewModel;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentPlacesBinding;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
 
 public class PlacesFragment extends Fragment {
 
@@ -107,3 +106,4 @@ public class PlacesFragment extends Fragment {
     }
 
 }
+

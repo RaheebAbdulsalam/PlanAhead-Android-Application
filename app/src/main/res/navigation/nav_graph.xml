@@ -7,30 +7,33 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="uk.ac.aston.cs3mdd.bottom_navigation.HomeFragment"
+        android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.HomeFragment"
         android:title="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
+
+
+    <action
+        android:id="@+id/action_addEventFragment_to_homeFragment"
+        app:destination="@id/navigation_home" />
+
     <fragment
         android:id="@+id/navigation_places"
-        android:name="uk.ac.aston.cs3mdd.bottom_navigation.PlacesFragment"
+        android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.PlacesFragment"
         android:title="@string/title_places"
         tools:layout="@layout/fragment_places" />
 
     <fragment
         android:id="@+id/navigation_map"
-        android:name="uk.ac.aston.cs3mdd.bottom_navigation.MapFragment"
+        android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.MapFragment"
         android:title="@string/title_map"
         tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="uk.ac.aston.cs3mdd.bottom_navigation.SettingsFragment"
+        android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.SettingsFragment"
         android:title="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
-
-
-
 
 
 </navigation>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uk.ac.aston.cs3mdd.bottom_navigation.SettingsFragment">
+    tools:context="uk.ac.aston.cs3mdd.planaheadmobileapplication.SettingsFragment">
 
     <TextView
         android:id="@+id/text_settings"

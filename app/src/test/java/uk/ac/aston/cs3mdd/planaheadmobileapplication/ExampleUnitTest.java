@@ -1,4 +1,4 @@
-package uk.ac.aston.cs3mdd.bottom_navigation;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
 import org.junit.Test;
 

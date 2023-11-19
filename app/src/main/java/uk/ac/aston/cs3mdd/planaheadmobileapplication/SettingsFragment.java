@@ -1,4 +1,4 @@
-package uk.ac.aston.cs3mdd.bottom_navigation;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,7 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import uk.ac.aston.cs3mdd.bottom_navigation.databinding.FragmentSettingsBinding;
+
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
     private FragmentSettingsBinding binding;
@@ -33,4 +34,5 @@ public class SettingsFragment extends Fragment {
     }
 
 }
+
 

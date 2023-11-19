@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/white">
+   >
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -52,7 +52,7 @@
         android:contentDescription="@string/add"
         android:foregroundTint="@color/white"
         android:src="@drawable/ic_add"
-        app:backgroundTint="@color/red"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:tint="@color/white"
         app:layout_anchor="@id/bottomAppBar" />
 

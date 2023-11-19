@@ -1,4 +1,4 @@
-package uk.ac.aston.cs3mdd.bottom_navigation.model;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication.model;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -17,3 +17,4 @@ public class HomeViewModel extends ViewModel {
         return mText;
     }
 }
+

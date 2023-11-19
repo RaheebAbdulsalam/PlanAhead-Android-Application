@@ -1,11 +1,13 @@
-package uk.ac.aston.cs3mdd.bottom_navigation;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -13,7 +15,10 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 
-import uk.ac.aston.cs3mdd.bottom_navigation.databinding.FragmentMapBinding;
+import android.Manifest;
+
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentMapBinding;
+
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -33,11 +38,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    //    @Override
+//    public void onMapReady(GoogleMap googleMap) {
+//        UiSettings uiSettings = googleMap.getUiSettings();
+//        uiSettings.setZoomControlsEnabled(true);
+//    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        UiSettings uiSettings = googleMap.getUiSettings();
-        uiSettings.setZoomControlsEnabled(true);
+        // Enable the My Location layer if the permission is granted
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+            UiSettings uiSettings = googleMap.getUiSettings();
+            uiSettings.setZoomControlsEnabled(true);
+        } else {
+            // Handle the case where the user hasn't granted the location permission
+            // You might want to request the permission again or show an explanation
+            // to the user.
+        }
     }
+
 
     @Override
     public void onResume() {
@@ -69,9 +89,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 }
+

@@ -1,4 +1,4 @@
-package uk.ac.aston.cs3mdd.bottom_navigation.model;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication.model;
 
 import android.location.Location;
 

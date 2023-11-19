@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Bottom_Navigation"
+rootProject.name = "PlanAhead Mobile Application"
 include ':app'

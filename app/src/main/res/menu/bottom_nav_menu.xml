@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item  android:id="@+id/navigation_home"
-        android:title="@string/title_home"
+    <item
+        android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home"
-        />
+        android:title="@string/title_home" />
 
-    <item android:id="@+id/navigation_places"
-        android:title="@string/title_places"
-        android:icon="@drawable/ic_places" />
+    <item
+        android:id="@+id/navigation_places"
+        android:icon="@drawable/ic_places"
+        android:title="@string/title_places" />
 
-    <item android:id="@+id/placeholder"
+    <item
+        android:id="@+id/placeholder"
         android:title="" />
 
-    <item android:id="@+id/navigation_map"
-        android:title="@string/title_map"
-        android:icon="@drawable/ic_map" />
+    <item
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/ic_map"
+        android:title="@string/title_map" />
 
-    <item android:id="@+id/navigation_settings"
-        android:title="@string/title_settings"
-        android:icon="@drawable/ic_settings" />
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/title_settings" />
 </menu>
