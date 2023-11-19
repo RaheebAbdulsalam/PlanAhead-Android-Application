@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="30dp"
-    tools:context=".events.AddEventActivity">
+    tools:context=".events.UpdateEventActivity">
 
     <EditText
-        android:id="@+id/title_input"
+        android:id="@+id/title_input_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/date_input"
+        android:id="@+id/date_input_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -32,10 +32,10 @@
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_input" />
+        app:layout_constraintTop_toBottomOf="@+id/title_input_update" />
 
     <EditText
-        android:id="@+id/time_input"
+        android:id="@+id/time_input_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -45,10 +45,10 @@
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_input" />
+        app:layout_constraintTop_toBottomOf="@+id/date_input_update" />
 
     <EditText
-        android:id="@+id/location_input"
+        android:id="@+id/location_input_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="204dp"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/notes_input"
+        android:id="@+id/notes_input_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="276dp"
@@ -74,16 +74,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/save_button"
+        android:id="@+id/update_button"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginTop="40dp"
-        android:text="Save"
+        android:text="Update"
         android:textAllCaps="false"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notes_input" />
-
+        app:layout_constraintTop_toBottomOf="@+id/notes_input_update" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

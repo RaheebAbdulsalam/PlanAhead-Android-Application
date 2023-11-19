@@ -23,7 +23,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private Database db;
     private ArrayList<String> event_id, event_title, event_date, event_time, event_location, event_notes;
-    private CustomAdapter customAdapter;
+    public CustomAdapter customAdapter;
 
     @Override
     public View onCreateView(
