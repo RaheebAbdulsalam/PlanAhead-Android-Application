@@ -37,6 +37,16 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBSBDw_fDYLYyCz7gYHyKXHkuqExx8dPHk" />
+
+        <meta-data
+            android:name="PLACES.API_KEY"
+            android:value="AIzaSyDC4jRL8Mc8u5rbnMAhson1Kgkbj40wFfU" />
+
+
+<!--        <meta-data-->
+<!--            android:name="WEATHER.API_KEY"-->
+<!--            android:value="fd738b5141e2c31ce6f902442a67df3d" />-->
+
     </application>
 
 </manifest>

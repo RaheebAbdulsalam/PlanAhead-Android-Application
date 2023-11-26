@@ -4,6 +4,7 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 import static com.google.android.gms.location.Priority.PRIORITY_BALANCED_POWER_ACCURACY;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.ActivityMainBinding;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.AddEventActivity;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.SingletonData;
+
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private BottomNavigationView bottomNavigationView;
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         //Bottom Navigation
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_map, R.id.navigation_places, R.id.navigation_settings)
+                R.id.navigation_home, R.id.navigation_map, R.id.navigation_places, R.id.navigation_weather)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -68,7 +71,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Places API
 
+        try {
+            ApplicationInfo applicationInfo =
+                    getApplication().getPackageManager()
+                            .getApplicationInfo(getApplication().getPackageName(), PackageManager.GET_META_DATA);
+
+            String apiKey = applicationInfo.metaData.getString("com.google.android.geo.API_KEY");
+
+            Log.i(TAG, "MAPS KEY is " + apiKey);
+            SingletonData.getInstance().setApiKey(apiKey);
+            String placesKey = applicationInfo.metaData.getString("PLACES.API_KEY");
+            SingletonData.getInstance().setPlacesKey(placesKey);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 //----------------------------------------------------------------------------------------------------------------//
 // The following code is all about Getting the device location (GPS)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);

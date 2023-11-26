@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.R;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
+public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder> {
 
     Context context;
     ArrayList event_id, event_title, event_date, event_time, event_location, event_notes;
 
-    public CustomAdapter(Context context, ArrayList event_id, ArrayList event_title, ArrayList event_date, ArrayList event_time, ArrayList event_location, ArrayList event_notes) {
+    public EventAdapter(Context context, ArrayList event_id, ArrayList event_title, ArrayList event_date, ArrayList event_time, ArrayList event_location, ArrayList event_notes) {
         this.context = context;
         this.event_id = event_id;
         this.event_title = event_title;

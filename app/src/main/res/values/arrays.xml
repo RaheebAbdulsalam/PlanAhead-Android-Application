@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="place_types">
+        <item>restaurant</item>
+        <item>cafe</item>
+        <item>supermarket</item>
+        <item>gas_station</item>
+        <item>parking</item>
+        <item>pharmacy</item>
+        <item>hotel</item>
+        <item>bank</item>
+        <item>post_office</item>
+        <item>police</item>
+
+    </string-array>
+</resources>

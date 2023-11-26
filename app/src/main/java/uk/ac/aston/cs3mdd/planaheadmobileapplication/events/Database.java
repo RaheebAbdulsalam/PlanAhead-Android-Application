@@ -81,7 +81,7 @@ public class Database extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void updateData(String row_id,String title, String date, String time, String location, String notes){
+    public void updateEvent(String row_id,String title, String date, String time, String location, String notes){
         SQLiteDatabase db =this. getWritableDatabase();
         ContentValues cv= new ContentValues();
         cv.put(COLUMN_TITLE, title);
@@ -97,6 +97,16 @@ public class Database extends SQLiteOpenHelper {
             Toast.makeText(context, "Failed to Update Event's Information", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "The Event has been updated Successfully!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void deleteEvent(String row_id){
+        SQLiteDatabase db= this.getWritableDatabase();
+        long result=  db.delete(TABLE_NAME,COLUMN_ID + "=?", new String[]{row_id});
+        if(result == -1){
+            Toast.makeText(context, "Faild to delete the event", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "The Event has been successfully deleted", Toast.LENGTH_SHORT).show();
         }
     }
 

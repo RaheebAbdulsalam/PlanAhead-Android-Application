@@ -30,10 +30,10 @@
         tools:layout="@layout/fragment_map" />
 
     <fragment
-        android:id="@+id/navigation_settings"
-        android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.SettingsFragment"
-        android:title="@string/title_settings"
-        tools:layout="@layout/fragment_settings" />
+        android:id="@+id/navigation_weather"
+        android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.WeatherFragment"
+        android:title="@string/title_weather"
+        tools:layout="@layout/fragment_weather" />
 
 
 </navigation>

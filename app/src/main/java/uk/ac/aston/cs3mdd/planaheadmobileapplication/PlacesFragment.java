@@ -1,109 +1,161 @@
 package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
-
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentPlacesBinding;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.MyPlace;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlaceListAdapter;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlacesViewModel;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.services.GetNearbyPlaces;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.services.PlacesRepository;
 
 public class PlacesFragment extends Fragment {
 
+    private PlacesViewModel viewModel;
     private FragmentPlacesBinding binding;
-
-    private LocationViewModel model;
+    private RecyclerView mRecyclerView;
+    private PlaceListAdapter mAdapter;
+    private EditText searchLocationEditText;
+    private Button searchButton;
+    private GetNearbyPlaces service;
+    private Retrofit retrofit;
+    private Spinner placeTypeSpinner;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
+        viewModel = new ViewModelProvider(requireActivity()).get(PlacesViewModel.class);
         binding = FragmentPlacesBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        View view = binding.getRoot();
 
+        // Initialize views
+        searchLocationEditText = view.findViewById(R.id.searchLocationEditText);
+        searchButton = view.findViewById(R.id.searchButton);
+        placeTypeSpinner = view.findViewById(R.id.placeTypeSpinner);
+
+        // Set up the Spinner with the array of place types
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.place_types,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        placeTypeSpinner.setAdapter(adapter);
+
+        // Set onClickListener for the search button
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the user's input
+                String location = searchLocationEditText.getText().toString();
+                // Perform the search
+                performSearch(location);
+            }
+        });
+
+        // Create the Retrofit instance
+        retrofit = new Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        // Create the service instance
+        service = retrofit.create(GetNearbyPlaces.class);
+
+        return view;
+    }
+
+    private void performSearch(String location) {
+        viewModel.getAllPlaces().getValue().clear();
+        // Get the selected place type from the Spinner
+        String selectedPlaceType = placeTypeSpinner.getSelectedItem().toString();
+
+        // Use the provided location and place type for the search
+        Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+        List<Address> addresses;
+
+        try {
+            addresses = geocoder.getFromLocationName(location, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                double latitude = address.getLatitude();
+                double longitude = address.getLongitude();
+
+                // Perform the search using the obtained latitude, longitude, and selected place type
+                viewModel.requestNearbyPlaces(new PlacesRepository(service), latitude + "," + longitude, 5000, selectedPlaceType);
+
+                // Display the formatted address in the UI
+                String addressFormatted = address.getAddressLine(0) + "\n" +
+                        address.getLocality() + "\n" +
+                        address.getAdminArea() + "\n" +
+                        address.getCountryName() + "\n" +
+                        address.getPostalCode() + "\n" +
+                        address.getFeatureName();
+                binding.searchLocationEditText.setText(addressFormatted);
+            } else {
+                Toast.makeText(getContext(), "No results found for the provided location", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            Toast.makeText(getContext(), "Error performing search: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        model = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
-        binding.latitude.setText("Not Set");
-        binding.longitude.setText("Not Set");
-        binding.timestamp.setText("No timestamp");
-        model.getCurrentLocation().observe(getViewLifecycleOwner(), loc -> {
-            if (loc != null) {
-                // Update the UI.
-                binding.latitude.setText("" + loc.getLatitude());
-                binding.longitude.setText("" + loc.getLongitude());
-                Date date = Calendar.getInstance().getTime();
-                date.setTime(loc.getTime());
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-                String strDate = dateFormat.format(date);
-                binding.timestamp.setText(strDate);
-                Geocoder geocoder;
-                List<Address> addresses;
-                geocoder = new Geocoder(getContext(), Locale.getDefault());
-                try {
-                    addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-
-                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                    String city = addresses.get(0).getLocality();
-                    String state = addresses.get(0).getAdminArea();
-                    String country = addresses.get(0).getCountryName();
-                    String postalCode = addresses.get(0).getPostalCode();
-                    String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-
-                    String addressFormatted = address + "\n" + city + "\n" + state + "\n" +
-                            country + "\n" + postalCode + "\n" + knownName;
-                    binding.address.setText(addressFormatted);
-                } catch (IOException e) {
-                    Log.e(MainActivity.TAG, "Error getting address\n"+e.getMessage());
-                }
-            }
-
-
-        });
-
-        // a listener to respond to button presses when updating the location
-        binding.updatesButton.setOnClickListener(new View.OnClickListener() {
+        // Create the observer which updates the UI.
+        final Observer<List<MyPlace>> userListObserver = new Observer<List<MyPlace>>() {
             @Override
-            public void onClick(View v) {
-                model.setLocationUpdates(!model.getLocationUpdates().getValue());
-                if (model.getLocationUpdates().getValue()) {
-                    binding.updatesButton.setText("Stop Location Updates");
-                    Log.i(MainActivity.TAG, "Location Updates Started");
-                } else {
-                    binding.updatesButton.setText("Start Location Updates");
-                    Log.i(MainActivity.TAG, "Location Updates Stopped");
-                }
+            public void onChanged(@Nullable final List<MyPlace> placeList) {
+                // Update the UI, in this case, a Toast.
+                Toast.makeText(getContext(),
+                        "We got a list of " + placeList.size() + " places",
+                        Toast.LENGTH_LONG).show();
+                mAdapter.updateData(placeList);
             }
-        });
-    }
+        };
 
+        // Get a handle to the RecyclerView.
+        mRecyclerView = view.findViewById(R.id.recyclerview);
+        // Create an adapter and supply the data to be displayed.
+        mAdapter = new PlaceListAdapter(getContext(), viewModel.getAllPlaces().getValue());
+        // Connect the adapter with the RecyclerView.
+        mRecyclerView.setAdapter(mAdapter);
+        // Give the RecyclerView a default layout manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        viewModel.getAllPlaces().observe(getViewLifecycleOwner(), userListObserver);
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
 }
-

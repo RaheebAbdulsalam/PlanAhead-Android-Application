@@ -15,15 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentHomeBinding;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.CustomAdapter;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Database;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventAdapter;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
     private Database db;
     private ArrayList<String> event_id, event_title, event_date, event_time, event_location, event_notes;
-    public CustomAdapter customAdapter;
+    public EventAdapter eventAdapter;
 
     @Override
     public View onCreateView(
@@ -46,8 +46,8 @@ public class HomeFragment extends Fragment {
         event_time = new ArrayList<>();
         event_location = new ArrayList<>();
         event_notes = new ArrayList<>();
-        customAdapter = new CustomAdapter(requireContext(), event_id, event_title, event_date, event_time, event_location, event_notes);
-        recyclerView.setAdapter(customAdapter);
+        eventAdapter = new EventAdapter(requireContext(), event_id, event_title, event_date, event_time, event_location, event_notes);
+        recyclerView.setAdapter(eventAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         storeDataInArrays();
@@ -58,6 +58,13 @@ public class HomeFragment extends Fragment {
         if (cursor.getCount() == 0) {
             Toast.makeText(requireContext(), "No data.", Toast.LENGTH_SHORT).show();
         } else {
+            // Clear existing data before populating the arrays
+            event_id.clear();
+            event_title.clear();
+            event_date.clear();
+            event_time.clear();
+            event_location.clear();
+            event_notes.clear();
             while (cursor.moveToNext()) {
                 event_id.add(cursor.getString(0));
                 event_title.add(cursor.getString(1));
@@ -66,7 +73,7 @@ public class HomeFragment extends Fragment {
                 event_location.add(cursor.getString(4));
                 event_notes.add(cursor.getString(5));
             }
-            customAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
+            eventAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
         }
     }
 
