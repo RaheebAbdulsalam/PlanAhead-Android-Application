@@ -15,9 +15,9 @@ import uk.ac.aston.cs3mdd.planaheadmobileapplication.HomeFragment;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.R;
 
 public class UpdateEventActivity extends AppCompatActivity {
-    EditText title_input, date_input, time_input, location_input, notes_input;
+    EditText title_input, date_input, time_input, address_input,postcode_input,city_input, notes_input;
     Button update_button, delete_button;
-    String id, title, date, time, location, notes;
+    String id, title, date, time, address, postcode,city, notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,9 @@ public class UpdateEventActivity extends AppCompatActivity {
         title_input = findViewById(R.id.title_input_update);
         date_input = findViewById(R.id.date_input_update);
         time_input = findViewById(R.id.time_input_update);
-        location_input = findViewById(R.id.location_input_update);
+        address_input = findViewById(R.id.address_input_update);
+        postcode_input = findViewById(R.id.postcode_input_update);
+        city_input = findViewById(R.id.city_input_update);
         notes_input = findViewById(R.id.notes_input_update);
         update_button = findViewById(R.id.update_button);
         delete_button=findViewById(R.id.delete_button);
@@ -48,9 +50,11 @@ public class UpdateEventActivity extends AppCompatActivity {
                 title = title_input.getText().toString().trim();
                 date = date_input.getText().toString().trim();
                 time = time_input.getText().toString().trim();
-                location = location_input.getText().toString().trim();
+                address = address_input.getText().toString().trim();
+                postcode = postcode_input.getText().toString().trim();
+                city= city_input.getText().toString().trim();
                 notes = notes_input.getText().toString().trim();
-                db.updateEvent(id, title, date, time, location, notes);
+                db.updateEvent(id, title, date, time, address,postcode,city, notes);
             }
         });
 
@@ -66,20 +70,26 @@ public class UpdateEventActivity extends AppCompatActivity {
     public void getIntentDataEvent() {
         if (getIntent().hasExtra("id") && getIntent().hasExtra("title") &&
                 getIntent().hasExtra("date") && getIntent().hasExtra("time") &&
-                getIntent().hasExtra("location") && getIntent().hasExtra("notes")) {
+                getIntent().hasExtra("address")&&
+                getIntent().hasExtra("postcode")&&
+                getIntent().hasExtra("city") && getIntent().hasExtra("notes")) {
             //Getting Data from Intent
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");
             date = getIntent().getStringExtra("date");
             time = getIntent().getStringExtra("time");
-            location = getIntent().getStringExtra("location");
+            address = getIntent().getStringExtra("address");
+            postcode = getIntent().getStringExtra("postcode");
+            city = getIntent().getStringExtra("city");
             notes = getIntent().getStringExtra("notes");
 
             //Setting Intent Data
             title_input.setText(title);
             date_input.setText(date);
             time_input.setText(time);
-            location_input.setText(location);
+            address_input.setText(address);
+            postcode_input.setText(postcode);
+            city_input.setText(city);
             notes_input.setText(notes);
         } else {
             Toast.makeText(this, "No data.", Toast.LENGTH_SHORT).show();

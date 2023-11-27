@@ -15,20 +15,26 @@ public class Database extends SQLiteOpenHelper {
 
     private Context context;
     private static final String DATABASE_NAME = "Events.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     private static final String TABLE_NAME = "events";
 
     private static final String COLUMN_ID = "_id";
 
-    private static final String COLUMN_TITLE = "evnet_title";
+    private static final String COLUMN_TITLE = "event_title";
 
     private static final String COLUMN_DATE = "event_date";
 
     private static final String COLUMN_TIME = "event_time";
 
-    private static final String COLUMN_LOCATION = "event_location";
+    private static final String COLUMN_ADDRESS = "event_address";
+
+    private static final String COLUMN_POSTCODE = "event_postcode";
+    private static final String COLUMN_CITY = "event_city";
 
     private static final String COLUMN_NOTES = "event_note";
+
+    private static final String MESSAGE_FAILED = "Failed";
+    private static final String MESSAGE_SUCCESS = "Your Event has been added successfully!";
 
     public Database(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,7 +48,9 @@ public class Database extends SQLiteOpenHelper {
                 COLUMN_TITLE + " TEXT, " +
                 COLUMN_DATE + " DATE, " +
                 COLUMN_TIME + " TIME, " +
-                COLUMN_LOCATION + " TEXT, " +
+                COLUMN_ADDRESS + " TEXT, " +
+                COLUMN_POSTCODE + " TEXT, " +
+                COLUMN_CITY + " TEXT, " +
                 COLUMN_NOTES + " TEXT);";
         db.execSQL(query);
     }
@@ -53,20 +61,22 @@ public class Database extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addEvent(String title, String date, String time, String location, String notes) {
+    public void addEvent(String title, String date, String time, String address,String postcode,String city, String notes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_TITLE, title);
         cv.put(COLUMN_DATE, date.toString());
         cv.put(COLUMN_TIME, time.toString());
-        cv.put(COLUMN_LOCATION, location);
+        cv.put(COLUMN_ADDRESS, address);
+        cv.put(COLUMN_POSTCODE, postcode);
+        cv.put(COLUMN_CITY, city);
         cv.put(COLUMN_NOTES, notes);
         long result = db.insert(TABLE_NAME, null, cv);
         if (result == -1) {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, MESSAGE_FAILED, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "Added Successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, MESSAGE_SUCCESS, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -81,13 +91,15 @@ public class Database extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void updateEvent(String row_id,String title, String date, String time, String location, String notes){
-        SQLiteDatabase db =this. getWritableDatabase();
-        ContentValues cv= new ContentValues();
+    public void updateEvent(String row_id, String title, String date, String time, String address,String postcode,String city, String notes) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
         cv.put(COLUMN_TITLE, title);
         cv.put(COLUMN_DATE, date.toString());
         cv.put(COLUMN_TIME, time.toString());
-        cv.put(COLUMN_LOCATION, location);
+        cv.put(COLUMN_ADDRESS, address);
+        cv.put(COLUMN_POSTCODE, postcode);
+        cv.put(COLUMN_CITY, city);
         cv.put(COLUMN_NOTES, notes);
 
         long result = db.update(TABLE_NAME, cv, COLUMN_ID + "=?", new String[]{row_id});
@@ -100,12 +112,12 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteEvent(String row_id){
-        SQLiteDatabase db= this.getWritableDatabase();
-        long result=  db.delete(TABLE_NAME,COLUMN_ID + "=?", new String[]{row_id});
-        if(result == -1){
+    public void deleteEvent(String row_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{row_id});
+        if (result == -1) {
             Toast.makeText(context, "Faild to delete the event", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             Toast.makeText(context, "The Event has been successfully deleted", Toast.LENGTH_SHORT).show();
         }
     }

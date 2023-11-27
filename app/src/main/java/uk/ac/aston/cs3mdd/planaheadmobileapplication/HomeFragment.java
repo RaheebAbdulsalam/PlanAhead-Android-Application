@@ -22,7 +22,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
     private Database db;
-    private ArrayList<String> event_id, event_title, event_date, event_time, event_location, event_notes;
+    private ArrayList<String> event_id, event_title, event_date, event_time, event_address,event_postcode,event_city, event_notes;
     public EventAdapter eventAdapter;
 
     @Override
@@ -44,9 +44,11 @@ public class HomeFragment extends Fragment {
         event_title = new ArrayList<>();
         event_date = new ArrayList<>();
         event_time = new ArrayList<>();
-        event_location = new ArrayList<>();
+        event_address = new ArrayList<>();
+        event_postcode = new ArrayList<>();
+        event_city = new ArrayList<>();
         event_notes = new ArrayList<>();
-        eventAdapter = new EventAdapter(requireContext(), event_id, event_title, event_date, event_time, event_location, event_notes);
+        eventAdapter = new EventAdapter(requireContext(), event_id, event_title, event_date, event_time, event_address,event_postcode,event_city, event_notes);
         recyclerView.setAdapter(eventAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -63,15 +65,19 @@ public class HomeFragment extends Fragment {
             event_title.clear();
             event_date.clear();
             event_time.clear();
-            event_location.clear();
+            event_address.clear();
+            event_postcode.clear();
+            event_city.clear();
             event_notes.clear();
             while (cursor.moveToNext()) {
                 event_id.add(cursor.getString(0));
                 event_title.add(cursor.getString(1));
                 event_date.add(cursor.getString(2));
                 event_time.add(cursor.getString(3));
-                event_location.add(cursor.getString(4));
-                event_notes.add(cursor.getString(5));
+                event_address.add(cursor.getString(4));
+                event_postcode.add(cursor.getString(5));
+                event_city.add(cursor.getString(6));
+                event_notes.add(cursor.getString(7));
             }
             eventAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
         }
