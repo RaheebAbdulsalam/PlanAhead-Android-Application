@@ -18,11 +18,12 @@ import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentHomeBin
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Database;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventAdapter;
 
+// Fragment class for displaying events in a RecyclerView on the home screen
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
     private Database db;
-    private ArrayList<String> event_id, event_title, event_date, event_time, event_address,event_postcode,event_city, event_notes;
+    private ArrayList<String> event_id, event_title, event_date, event_time, event_address, event_postcode, event_city, event_notes;
     public EventAdapter eventAdapter;
 
     @Override
@@ -36,10 +37,11 @@ public class HomeFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        // Initialise RecyclerView and Database
         recyclerView = view.findViewById(R.id.recyclerView);
-
         db = new Database(requireContext());
+
+        // Initialise ArrayLists for event details and create an EventAdapter
         event_id = new ArrayList<>();
         event_title = new ArrayList<>();
         event_date = new ArrayList<>();
@@ -48,13 +50,17 @@ public class HomeFragment extends Fragment {
         event_postcode = new ArrayList<>();
         event_city = new ArrayList<>();
         event_notes = new ArrayList<>();
-        eventAdapter = new EventAdapter(requireContext(), event_id, event_title, event_date, event_time, event_address,event_postcode,event_city, event_notes);
+        eventAdapter = new EventAdapter(requireContext(), event_id, event_title, event_date, event_time, event_address, event_postcode, event_city, event_notes);
+
+        // Set the adapter and layout manager for the RecyclerView
         recyclerView.setAdapter(eventAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        // Fetch the arrays with data from the database
         storeDataInArrays();
     }
 
+    // Method to retrieve data from the database
     public void storeDataInArrays() {
         Cursor cursor = db.readAllData();
         if (cursor.getCount() == 0) {
@@ -70,6 +76,7 @@ public class HomeFragment extends Fragment {
             event_city.clear();
             event_notes.clear();
             while (cursor.moveToNext()) {
+                // Add data from the cursor to the arrays
                 event_id.add(cursor.getString(0));
                 event_title.add(cursor.getString(1));
                 event_date.add(cursor.getString(2));
@@ -79,12 +86,11 @@ public class HomeFragment extends Fragment {
                 event_city.add(cursor.getString(6));
                 event_notes.add(cursor.getString(7));
             }
-            eventAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
+            // Notify the adapter that the data has changed
+            eventAdapter.notifyDataSetChanged();
         }
     }
 
-    // This method is called when the view associated with the fragment is being destroyed.
-    // It releases any resources associated with the view.
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.R;
 
+// Adapter class for RecyclerView to display events
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder> {
 
+    // Context and data arrays for event details
     Context context;
     ArrayList event_id, event_title, event_date, event_time, event_address,event_postcode,event_city, event_notes;
 
@@ -30,17 +32,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
         this.event_notes = event_notes;
     }
 
+    // Called when a new ViewHolder object is created
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout for each item in the RecyclerView
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.events_row, parent, false);
         return new MyViewHolder(view);
     }
 
+    // Called to bind the data to the views in each ViewHolder
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-//        holder.event_id_txt.setText(String.valueOf(event_id.get(position)));
+        // Set the text of TextViews with corresponding event details
         holder.event_title_txt.setText(String.valueOf(event_title.get(position)));
         holder.event_date_txt.setText(String.valueOf(event_date.get(position)));
         holder.event_time_txt.setText(String.valueOf(event_time.get(position)));
@@ -49,10 +54,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
         holder.event_city_txt.setText(String.valueOf(event_city.get(position)));
         holder.event_notes_txt.setText(String.valueOf(event_notes.get(position)));
 
-        //Recyclerview onClickListener
+        // Set onClickListener for the entire item
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Creating an intent to open the UpdateEventActivity and pass event details
                 Intent intent = new Intent(context, UpdateEventActivity.class);
                 intent.putExtra("id",String.valueOf(event_id.get(position)));
                 intent.putExtra("title",String.valueOf(event_title.get(position)));
@@ -67,11 +73,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
         });
     }
 
+    // Method to return the total number of items
     @Override
     public int getItemCount() {
         return event_id.size();
     }
 
+    // ViewHolder class to hold the views for each item in the RecyclerView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView event_title_txt, event_date_txt, event_time_txt, event_address_txt, event_postcode_txt, event_city_txt, event_notes_txt;
         LinearLayout mainLayout;

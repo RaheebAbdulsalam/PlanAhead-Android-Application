@@ -14,6 +14,7 @@ import android.widget.Toast;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.HomeFragment;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.R;
 
+// Activity class for updating and deleting an event
 public class UpdateEventActivity extends AppCompatActivity {
     EditText title_input, date_input, time_input, address_input,postcode_input,city_input, notes_input;
     Button update_button, delete_button;
@@ -23,7 +24,7 @@ public class UpdateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_event);
-
+        // Initialising layout elements by finding them using their IDs
         title_input = findViewById(R.id.title_input_update);
         date_input = findViewById(R.id.date_input_update);
         time_input = findViewById(R.id.time_input_update);
@@ -34,6 +35,7 @@ public class UpdateEventActivity extends AppCompatActivity {
         update_button = findViewById(R.id.update_button);
         delete_button=findViewById(R.id.delete_button);
 
+        // Retrieve data from the Intent
         getIntentDataEvent();
 
         //Setting the Event Title as the action bar title when clicking on an event
@@ -47,6 +49,7 @@ public class UpdateEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Database db = new Database(UpdateEventActivity.this);
+                // Retrieve updated event details from the input fields
                 title = title_input.getText().toString().trim();
                 date = date_input.getText().toString().trim();
                 time = time_input.getText().toString().trim();
@@ -54,6 +57,7 @@ public class UpdateEventActivity extends AppCompatActivity {
                 postcode = postcode_input.getText().toString().trim();
                 city= city_input.getText().toString().trim();
                 notes = notes_input.getText().toString().trim();
+                // Update the event in the database
                 db.updateEvent(id, title, date, time, address,postcode,city, notes);
             }
         });
@@ -62,11 +66,13 @@ public class UpdateEventActivity extends AppCompatActivity {
         delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Show a confirmation dialog before deleting the event
                 confirmMessage();
             }
         });
     }
 
+    // Retrieve event data from the Intent
     public void getIntentDataEvent() {
         if (getIntent().hasExtra("id") && getIntent().hasExtra("title") &&
                 getIntent().hasExtra("date") && getIntent().hasExtra("time") &&
@@ -83,7 +89,7 @@ public class UpdateEventActivity extends AppCompatActivity {
             city = getIntent().getStringExtra("city");
             notes = getIntent().getStringExtra("notes");
 
-            //Setting Intent Data
+            //Setting Intent Data to input fields
             title_input.setText(title);
             date_input.setText(date);
             time_input.setText(time);
@@ -97,7 +103,7 @@ public class UpdateEventActivity extends AppCompatActivity {
     }
 
 
-    //A dialog message when user clicks on delete button
+    //A method to display a confirmation dialog before deleting the event
     public void confirmMessage(){
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
         builder.setTitle(" Delete " + title + " ? ");
@@ -109,6 +115,7 @@ public class UpdateEventActivity extends AppCompatActivity {
                 db.deleteEvent(id);
                 // Notify HomeFragment to refresh the data
                 ((HomeFragment)getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).storeDataInArrays();
+                // Finish the activity
                 finish();
 
             }
@@ -116,7 +123,7 @@ public class UpdateEventActivity extends AppCompatActivity {
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                // Cancel the delete process if the user chooses not to delete
             }
         });
         builder.create().show();

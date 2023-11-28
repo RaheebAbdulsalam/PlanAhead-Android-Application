@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 
+// Database class responsible for managing the SQLite database for events
 public class Database extends SQLiteOpenHelper {
 
     private Context context;
@@ -41,8 +42,10 @@ public class Database extends SQLiteOpenHelper {
         this.context = context;
     }
 
+    // Called when the database is created for the first time
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // SQL query to create the 'events' table
         String query = "CREATE TABLE " + TABLE_NAME +
                 " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TITLE + " TEXT, " +
@@ -55,16 +58,20 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
+    // Called when the database needs to be upgraded
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop the existing 'events' table and recreate it
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
 
-    public void addEvent(String title, String date, String time, String address,String postcode,String city, String notes) {
+    // Method to add a new event to the database
+    public void addEvent(String title, String date, String time, String address, String postcode, String city, String notes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
+        // Put event details into ContentValues object
         cv.put(COLUMN_TITLE, title);
         cv.put(COLUMN_DATE, date.toString());
         cv.put(COLUMN_TIME, time.toString());
@@ -72,7 +79,10 @@ public class Database extends SQLiteOpenHelper {
         cv.put(COLUMN_POSTCODE, postcode);
         cv.put(COLUMN_CITY, city);
         cv.put(COLUMN_NOTES, notes);
+
+        // Insert the event into the 'events' table
         long result = db.insert(TABLE_NAME, null, cv);
+
         if (result == -1) {
             Toast.makeText(context, MESSAGE_FAILED, Toast.LENGTH_SHORT).show();
         } else {
@@ -80,10 +90,12 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
+    // Method to retrieve all events from the database
     public Cursor readAllData() {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
+        // Execute the query and store the result in a Cursor
         Cursor cursor = null;
         if (db != null) {
             cursor = db.rawQuery(query, null);
@@ -91,7 +103,8 @@ public class Database extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void updateEvent(String row_id, String title, String date, String time, String address,String postcode,String city, String notes) {
+    // Method to update an existing event in the database
+    public void updateEvent(String row_id, String title, String date, String time, String address, String postcode, String city, String notes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_TITLE, title);
@@ -102,6 +115,7 @@ public class Database extends SQLiteOpenHelper {
         cv.put(COLUMN_CITY, city);
         cv.put(COLUMN_NOTES, notes);
 
+        // Update the event in the 'events' table based on the row_id
         long result = db.update(TABLE_NAME, cv, COLUMN_ID + "=?", new String[]{row_id});
         Log.d("UpdateEventActivity", "Update result: " + result);
 
@@ -112,9 +126,13 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
+    // Method to delete an event from the database
     public void deleteEvent(String row_id) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        // Delete the event from the 'events' table based on the row_id
         long result = db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{row_id});
+
         if (result == -1) {
             Toast.makeText(context, "Faild to delete the event", Toast.LENGTH_SHORT).show();
         } else {

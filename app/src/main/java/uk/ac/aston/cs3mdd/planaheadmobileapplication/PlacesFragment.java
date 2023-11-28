@@ -111,12 +111,7 @@ public class PlacesFragment extends Fragment {
                 viewModel.requestNearbyPlaces(new PlacesRepository(service), latitude + "," + longitude, 5000, selectedPlaceType);
 
                 // Display the formatted address in the UI
-                String addressFormatted = address.getAddressLine(0) + "\n" +
-                        address.getLocality() + "\n" +
-                        address.getAdminArea() + "\n" +
-                        address.getCountryName() + "\n" +
-                        address.getPostalCode() + "\n" +
-                        address.getFeatureName();
+                String addressFormatted = address.getAddressLine(0) + "\n" ;
                 binding.searchLocationEditText.setText(addressFormatted);
             } else {
                 Toast.makeText(getContext(), "No results found for the provided location", Toast.LENGTH_SHORT).show();

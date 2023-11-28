@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import android.Manifest;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,29 +43,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mGoogleMap;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMapBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-
         mapView = binding.mapView;
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         mapSearch = binding.inputSearch;
-
-        return view;
+        return binding.getRoot();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // Enable the My Location layer if the permission is granted
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mGoogleMap = googleMap;
             mGoogleMap.setMyLocationEnabled(true);
             UiSettings uiSettings = mGoogleMap.getUiSettings();
             uiSettings.setZoomControlsEnabled(true);
-            // Initialising search functionality
             initSearch();
         }
     }
@@ -74,19 +67,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     //Initialising search functionality for the map
     private void initSearch() {
-        mapSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || (event.getAction() == KeyEvent.ACTION_DOWN
-                        && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    // Handling search action
-                    searchAndMoveToLocation(); // Call the method to perform geocoding and move the camera
-                    return true;
-                }
-                return false;
+        mapSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
+                    (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                searchAndMoveToLocation();
+                return true;
             }
+            return false;
         });
     }
 
@@ -104,21 +91,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         if (list.size() > 0) {
             Address address = list.get(0);
-
-            // Log the address details for debugging
             Log.d(TAG, "searchAndMoveToLocation: found location: " + address.toString());
-
-            // Move the camera to the searched location
-            float zoomLevel = 16.0f; // Adjust this value as needed
+            float zoomLevel = 16.0f;
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(address.getLatitude(), address.getLongitude()), zoomLevel));
-
-            // Add a marker at the searched location
-            mGoogleMap.clear(); // Clear existing markers
+            mGoogleMap.clear();
             mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(address.getLatitude(), address.getLongitude()))
                     .title("Searched Location"));
         } else {
-            // Log a message if no location is found
             Log.d(TAG, "searchAndMoveToLocation: location not found");
         }
     }
@@ -153,7 +133,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onLowMemory();
         mapView.onLowMemory();
     }
-
 
     @Override
     public void onDestroyView() {
