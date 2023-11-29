@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -29,6 +31,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.ActivityMainBinding;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.AddEventActivity;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set up the layout
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -71,15 +76,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Places API
-
+        // Initialize the Places API keys
         try {
             ApplicationInfo applicationInfo =
                     getApplication().getPackageManager()
                             .getApplicationInfo(getApplication().getPackageName(), PackageManager.GET_META_DATA);
-
             String apiKey = applicationInfo.metaData.getString("com.google.android.geo.API_KEY");
-
             Log.i(TAG, "MAPS KEY is " + apiKey);
             SingletonData.getInstance().setApiKey(apiKey);
             String placesKey = applicationInfo.metaData.getString("PLACES.API_KEY");
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 //----------------------------------------------------------------------------------------------------------------//
-// The following code is all about Getting the device location (GPS)
+// Getting the device location (GPS)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         model = new ViewModelProvider(this).get(LocationViewModel.class);
         //Adding location permission
@@ -97,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this,
                         android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            Log.i(TAG, "Location permissions have not been granted");
+
+            // Request location permissions using ActivityResultLauncher
             ActivityResultLauncher<String[]> locationPermissionRequest =
                     registerForActivityResult(new ActivityResultContracts
                                     .RequestMultiplePermissions(), result -> {
@@ -117,19 +120,18 @@ public class MainActivity extends AppCompatActivity {
                             }
                     );
 
-// Before you perform the actual permission request, check whether your app
-// already has the permissions, and whether your app needs to show a permission
-// rationale dialog. For more details, see Request permissions.
+            // Launch the location permission request to check whether the app already has the permissions, and whether the app needs to show a permission dialog
             locationPermissionRequest.launch(new String[]{
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
             });
         } else {
+            // Location permissions already granted, get the last known location
             Log.i(TAG, "Location permissions already granted.");
             getLastLocation();
         }
 
-        // This is where we are notified of the location update
+        // Set up location callback to handle location updates
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -159,15 +161,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // get the last location, we are going to use this method in multiple places where we need to make the call the get the last location
+    // Method to et the last location, used in multiple places where the last location is needed
     public void getLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
         fusedLocationClient.getCurrentLocation(PRIORITY_BALANCED_POWER_ACCURACY, null)
-//        fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
 
                     @Override
@@ -198,12 +198,12 @@ public class MainActivity extends AppCompatActivity {
                 Looper.getMainLooper());
     }
 
-    // stop location updates
+    //  A method to stop location updates
     private void stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
-    // a method to initialise the locationRequest
+    // A method to initialise the locationRequest
     protected void createLocationRequest() {
         locationRequest = new LocationRequest.Builder(10000)
                 .setMinUpdateIntervalMillis(5000)
@@ -211,8 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
     }
 
-
-    // Check if the location updates were previously requested
+    // A method to check if the location updates were previously requested
     @Override
     protected void onResume() {
         super.onResume();
@@ -221,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Turn the location updates off while the app is not in the foreground
+    // A method to turn the location updates off while the app is not in the foreground
     @Override
     protected void onPause() {
         super.onPause();
