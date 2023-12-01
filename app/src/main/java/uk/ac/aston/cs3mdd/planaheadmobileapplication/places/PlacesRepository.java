@@ -1,11 +1,9 @@
-package uk.ac.aston.cs3mdd.planaheadmobileapplication.services;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication.places;
 
 import retrofit2.Call;
 import android.util.Log;
 
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.MainActivity;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlacesList;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.SingletonData;
 
 public class PlacesRepository {
     private GetNearbyPlaces nearbyPlacesService;

@@ -30,8 +30,8 @@ import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentPlacesB
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.MyPlace;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlaceListAdapter;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlacesViewModel;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.services.GetNearbyPlaces;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.services.PlacesRepository;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.GetNearbyPlaces;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlacesRepository;
 
 public class PlacesFragment extends Fragment {
 

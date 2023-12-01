@@ -19,7 +19,11 @@
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter city name" />
+            android:hint="@string/event_weather_editText"
+            android:minHeight="48dp"
+            android:inputType="textPostalAddress"
+            android:autofillHints="Address"
+            tools:ignore="VisualLintTextFieldSize" />
 
         <Button
             android:id="@+id/searchButton"
@@ -27,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:text="Search" />
+            android:text="@string/check_weather" />
     </LinearLayout>
 
     <LinearLayout
@@ -59,7 +63,8 @@
             android:layout_width="140dp"
             android:layout_height="141dp"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/weather_icon" />
 
         <TextView
             android:id="@+id/descriptionTextView"

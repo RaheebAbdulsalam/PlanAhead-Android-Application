@@ -134,7 +134,7 @@ public class Database extends SQLiteOpenHelper {
         long result = db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{row_id});
 
         if (result == -1) {
-            Toast.makeText(context, "Faild to delete the event", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to delete the event", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "The Event has been successfully deleted", Toast.LENGTH_SHORT).show();
         }

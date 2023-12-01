@@ -1,9 +1,8 @@
-package uk.ac.aston.cs3mdd.planaheadmobileapplication.services;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication.places;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlacesList;
 
 public interface GetNearbyPlaces {
 

@@ -1,18 +1,38 @@
 <resources>
+
+<!--    Navigation-->
     <string name="app_name">My App</string>
     <string name="title_home">Home</string>
     <string name="title_map">Map</string>
     <string name="title_weather">Weather</string>
     <string name="title_places">Places</string>
     <string name="title_addEvent">Add An Event</string>
-
     <string name="add">Add Button</string>
 
+    <!--    Events form (Add Event & Update Event)-->
+    <string name="hint_event_title">Event Title</string>
+    <string name="hint_event_date">Event Date</string>
+    <string name="hint_event_time">Event Time</string>
+    <string name="hint_event_address">Address</string>
+    <string name="hint_event_postcode">Postcode</string>
+    <string name="hint_event_city">City</string>
+    <string name="hint_event_note">Event Note</string>
+    <string name="button_save">Save</string>
+    <string name="button_update">Update</string>
+    <string name="button_delete">Delete</string>
     <string name="event_date_time_format">%s %s</string>
-
     <string name="event_location_format">%s</string>
 
     <string name="map_description">Map view for displaying location information</string>
+    <string name="search">Search Nearby Places</string>
+    <string name="enter_location"> Please Enter your Event\'s Location</string>
+    <string name="enter_address_or_postcode">Enter your event\'s Address or Postcode</string>
+    <string name="search_map">Search</string>
+    <string name="place_icon">Place icon</string>
 
+    <!-- Weather Layout -->
+    <string name="check_weather">Check the Weather</string>
+    <string name="event_weather_editText">Enter your event location</string>
+    <string name="weather_icon">Weather Icon</string>
 
 </resources>

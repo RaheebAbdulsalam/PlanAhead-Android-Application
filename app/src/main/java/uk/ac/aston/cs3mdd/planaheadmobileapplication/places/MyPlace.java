@@ -17,13 +17,6 @@ public class MyPlace {
         this.name = name;
     }
 
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Place called " + name + " at " + geometry.toString();
-    }
-
     public String getIcon() {
         return icon;
     }
@@ -54,5 +47,27 @@ public class MyPlace {
 
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
+    }
+
+    // Method to get latitude
+    public double getLatitude() {
+        if (geometry != null && geometry.getLocation() != null) {
+            return geometry.getLocation().getLat();
+        }
+        return 0.0;
+    }
+
+    // Method to get longitude
+    public double getLongitude() {
+        if (geometry != null && geometry.getLocation() != null) {
+            return geometry.getLocation().getLng();
+        }
+        return 0.0;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Place called " + name + " at " + geometry.toString();
     }
 }

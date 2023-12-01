@@ -14,14 +14,16 @@ import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -40,7 +42,7 @@ import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.SingletonData;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private BottomNavigationView bottomNavigationView;
-    public static final String TAG = "MYTAG";
+    public static final String TAG = "MY-TAG";
     private LocationViewModel model;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationRequest locationRequest;
@@ -63,6 +65,23 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
+
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                // Update the action bar title based on the destination ID
+                int destinationId = destination.getId();
+                if (destinationId == R.id.navigation_home) {
+                    getSupportActionBar().setTitle("Home");
+                } else if (destinationId == R.id.navigation_map) {
+                    getSupportActionBar().setTitle("Map View");
+                } else if (destinationId == R.id.navigation_places) {
+                    getSupportActionBar().setTitle("Nearby Places");
+                } else if (destinationId == R.id.navigation_weather) {
+                    getSupportActionBar().setTitle("Weather");
+                }
+            }
+        });
 
 
         // FloatingActionButton to add an Event
@@ -160,8 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    // Method to et the last location, used in multiple places where the last location is needed
+    // Method to get the last location, used in multiple places where the last location is needed
     public void getLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

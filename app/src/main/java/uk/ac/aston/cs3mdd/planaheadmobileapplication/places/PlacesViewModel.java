@@ -14,7 +14,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.MainActivity;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.services.PlacesRepository;
 
 
 public class PlacesViewModel extends ViewModel {

@@ -5,13 +5,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -44,8 +41,8 @@ public class PlaceListAdapter extends
         holder.place = myPlace;
         String name = myPlace.getName();
         holder.placeNameView.setText(name);
-        String icon = myPlace.getIcon();
-        Picasso.get().load(icon).into(holder.placeIcon);
+//        String icon = myPlace.getIcon();
+//        Picasso.get().load(icon).into(holder.placeIcon);
     }
 
     @Override
@@ -60,14 +57,14 @@ public class PlaceListAdapter extends
 
     class PlaceViewHolder extends RecyclerView.ViewHolder {
         public final TextView placeNameView;
-        public final ImageView placeIcon;
+//        public final ImageView placeIcon;
         final PlaceListAdapter mAdapter;
         public MyPlace place;
 
         public PlaceViewHolder(@NonNull View itemView, PlaceListAdapter adapter) {
             super(itemView);
             placeNameView = itemView.findViewById(R.id.placename);
-            this.placeIcon = itemView.findViewById(R.id.placeicon);
+//            this.placeIcon = itemView.findViewById(R.id.placeicon);
             this.mAdapter = adapter;
         }
     }
