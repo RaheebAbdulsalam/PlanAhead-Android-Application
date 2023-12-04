@@ -44,7 +44,7 @@
 
 
         <meta-data
-            android:name="OPENWEATHER_API_KEY"
+            android:name="WEATHER.API_KEY"
             android:value="fd738b5141e2c31ce6f902442a67df3d" />
 
     </application>

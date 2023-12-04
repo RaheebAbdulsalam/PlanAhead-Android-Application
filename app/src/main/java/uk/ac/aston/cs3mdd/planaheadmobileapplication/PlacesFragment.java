@@ -91,6 +91,35 @@ public class PlacesFragment extends Fragment {
         return view;
     }
 
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Create the observer which updates the UI.
+        final Observer<List<MyPlace>> userListObserver = new Observer<List<MyPlace>>() {
+            @Override
+            public void onChanged(@Nullable final List<MyPlace> placeList) {
+                // Update the UI, in this case, a Toast.
+                Toast.makeText(getContext(),
+                        "We got a list of " + placeList.size() + " places",
+                        Toast.LENGTH_LONG).show();
+                mAdapter.updateData(placeList);
+            }
+        };
+
+        // Get a handle to the RecyclerView.
+        mRecyclerView = view.findViewById(R.id.recyclerview);
+        // Create an adapter and supply the data to be displayed.
+        mAdapter = new PlaceListAdapter(getContext(), viewModel.getAllPlaces().getValue());
+        // Connect the adapter with the RecyclerView.
+        mRecyclerView.setAdapter(mAdapter);
+        // Give the RecyclerView a default layout manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        viewModel.getAllPlaces().observe(getViewLifecycleOwner(), userListObserver);
+    }
+
+
+
     private void performSearch(String location) {
         viewModel.getAllPlaces().getValue().clear();
         // Get the selected place type from the Spinner
@@ -121,32 +150,6 @@ public class PlacesFragment extends Fragment {
         }
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Create the observer which updates the UI.
-        final Observer<List<MyPlace>> userListObserver = new Observer<List<MyPlace>>() {
-            @Override
-            public void onChanged(@Nullable final List<MyPlace> placeList) {
-                // Update the UI, in this case, a Toast.
-                Toast.makeText(getContext(),
-                        "We got a list of " + placeList.size() + " places",
-                        Toast.LENGTH_LONG).show();
-                mAdapter.updateData(placeList);
-            }
-        };
-
-        // Get a handle to the RecyclerView.
-        mRecyclerView = view.findViewById(R.id.recyclerview);
-        // Create an adapter and supply the data to be displayed.
-        mAdapter = new PlaceListAdapter(getContext(), viewModel.getAllPlaces().getValue());
-        // Connect the adapter with the RecyclerView.
-        mRecyclerView.setAdapter(mAdapter);
-        // Give the RecyclerView a default layout manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        viewModel.getAllPlaces().observe(getViewLifecycleOwner(), userListObserver);
-    }
 
     @Override
     public void onDestroyView() {

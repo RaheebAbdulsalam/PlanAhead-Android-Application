@@ -35,30 +35,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp">
 
-        <EditText
-            android:id="@+id/date_input_update"
+        <Button
+            android:id="@+id/date_button_update"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/hint_event_date"
-            android:inputType="date"
+            android:layout_marginEnd="8dp"
+            android:text="@string/hint_event_date"
             android:minHeight="48dp"
-            android:autofillHints="date"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:onClick="onDateButtonClick"
+            tools:ignore="VisualLintButtonSize" />
 
-        <EditText
-            android:id="@+id/time_input_update"
+        <Button
+            android:id="@+id/time_button_update"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:ems="10"
-            android:hint="@string/hint_event_time"
-            android:inputType="time"
+            android:text="@string/hint_event_time"
             android:minHeight="48dp"
-            android:autofillHints="time"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:onClick="onTimeButtonClick"
+            tools:ignore="VisualLintButtonSize" />
     </LinearLayout>
 
     <!-- Address Section (address, postcode, and city) -->

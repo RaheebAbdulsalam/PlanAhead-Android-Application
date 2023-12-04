@@ -72,12 +72,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
             // Set the initial camera position to focus on the UK
-            LatLng ukLatLng = new LatLng(52.4862, -1.8904); // Coordinates for London, UK
+            LatLng ukLatLng = new LatLng(52.4862, -1.8904); // Coordinates for Birmingham
             float zoomLevel = 8.0f; // Adjust the zoom level as needed
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ukLatLng, zoomLevel));
 
 
-            initSearch();
+            searchAddress();
             // Add markers for all nearby places
             addMarkersForPlaces();
         }
@@ -101,8 +101,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     //Initialising search functionality for the map
-    private void initSearch() {
-
+    private void searchAddress() {
         // Set OnClickListener for the search icon
         searchIcon.setOnClickListener(v -> searchAndMoveToLocation());
 

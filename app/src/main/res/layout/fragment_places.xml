@@ -7,10 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".PlacesFragment">
 
+    <!-- Search Location EditText -->
     <EditText
         android:id="@+id/searchLocationEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="362dp"
+        android:layout_height="53dp"
         android:layout_marginTop="16dp"
         android:autofillHints="Location"
         android:hint="@string/enter_location"
@@ -18,13 +19,13 @@
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="VisualLintTextFieldSize" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Place Type Spinner -->
     <Spinner
         android:id="@+id/placeTypeSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="308dp"
+        android:layout_height="52dp"
         android:layout_marginTop="8dp"
         android:entries="@array/place_types"
         android:minHeight="48dp"
@@ -32,16 +33,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchLocationEditText" />
 
+
+    <!-- Search Button -->
     <Button
         android:id="@+id/searchButton"
-        android:layout_width="297dp"
-        android:layout_height="50dp"
+        android:layout_width="244dp"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:text="@string/search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/placeTypeSpinner" />
+        app:layout_constraintTop_toBottomOf="@id/placeTypeSpinner"
+        tools:ignore="TextSizeCheck" />
 
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="0dp"
@@ -49,9 +54,11 @@
         app:layout_constraintTop_toBottomOf="@id/searchButton"
         app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/colorAccent">
     </androidx.recyclerview.widget.RecyclerView>
 
+    <!-- Guideline for bottom spacing -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
         android:layout_width="match_parent"

@@ -140,4 +140,12 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
+
+    // Method to search for events by title
+    public Cursor searchData(String title) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_TITLE + " LIKE ?";
+        return db.rawQuery(query, new String[]{"%" + title + "%"});
+    }
+
 }

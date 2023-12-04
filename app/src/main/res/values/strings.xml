@@ -16,7 +16,7 @@
     <string name="hint_event_address">Address</string>
     <string name="hint_event_postcode">Postcode</string>
     <string name="hint_event_city">City</string>
-    <string name="hint_event_note">Event Note</string>
+    <string name="hint_event_note">Add notes about the event...</string>
     <string name="button_save">Save</string>
     <string name="button_update">Update</string>
     <string name="button_delete">Delete</string>
@@ -34,5 +34,6 @@
     <string name="check_weather">Check the Weather</string>
     <string name="event_weather_editText">Enter your event location</string>
     <string name="weather_icon">Weather Icon</string>
+    <string name="search_events_by_title">Search for your special event</string>
 
 </resources>

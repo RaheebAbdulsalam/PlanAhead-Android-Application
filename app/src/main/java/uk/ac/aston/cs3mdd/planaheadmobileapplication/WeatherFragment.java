@@ -1,11 +1,14 @@
 package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
+import static uk.ac.aston.cs3mdd.planaheadmobileapplication.MainActivity.TAG;
+
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -41,12 +45,13 @@ public class WeatherFragment extends Fragment {
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
         binding = FragmentWeatherBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -100,22 +105,29 @@ public class WeatherFragment extends Fragment {
                             Picasso.get().load(iconUrl).into(weatherIconImageView);
                         } else {
                             // Handle null response or error
+                            Toast.makeText(requireContext(), "Error fetching weather data. Please try again.", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Weather data response is null or an error occurred");
                         }
                     });
                 } else {
-                    // Handle case where coordinates couldn't be retrieved for the given city name
+                    // Handle case where coordinates couldn't be retrieved for the given address
+                    Toast.makeText(requireContext(), "Could not retrieve coordinates for the given address.", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Coordinates are null for the given city name");
                 }
             } else {
-                // Handle case where the city name is empty
+                // Handle case where the address name is empty
+                Toast.makeText(requireContext(), "Please enter an address.", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "City name is empty");
             }
+
         });
     }
 
     private String getApiKey(Context context) {
         try {
-            ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            Bundle bundle = ai.metaData;
-            return bundle.getString("OPENWEATHER_API_KEY");
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = applicationInfo.metaData;
+            return bundle.getString("WEATHER.API_KEY");
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return null;
