@@ -1,6 +1,5 @@
 package uk.ac.aston.cs3mdd.planaheadmobileapplication.events;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -16,70 +15,57 @@ import uk.ac.aston.cs3mdd.planaheadmobileapplication.R;
 // Adapter class for RecyclerView to display events
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder> {
 
-    // Context and data arrays for event details
-    Context context;
-    ArrayList event_id, event_title, event_date, event_time, event_address,event_postcode,event_city, event_notes;
+    private Context context;
+    private ArrayList<Event> events;
 
-    public EventAdapter(Context context, ArrayList event_id, ArrayList event_title, ArrayList event_date, ArrayList event_time, ArrayList event_address,ArrayList event_postcode,ArrayList event_city, ArrayList event_notes) {
+    public EventAdapter(Context context, ArrayList<Event> events) {
         this.context = context;
-        this.event_id = event_id;
-        this.event_title = event_title;
-        this.event_date = event_date;
-        this.event_time = event_time;
-        this.event_address = event_address;
-        this.event_postcode = event_postcode;
-        this.event_city = event_city;
-        this.event_notes = event_notes;
+        this.events = events;
     }
 
-    // Called when a new ViewHolder object is created
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the layout for each item in the RecyclerView
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.events_row, parent, false);
         return new MyViewHolder(view);
     }
 
-    // Called to bind the data to the views in each ViewHolder
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        // Set the text of TextViews with corresponding event details
-        holder.event_title_txt.setText(String.valueOf(event_title.get(position)));
-        holder.event_date_txt.setText(String.valueOf(event_date.get(position)));
-        holder.event_time_txt.setText(String.valueOf(event_time.get(position)));
-        holder.event_address_txt.setText(String.valueOf(event_address.get(position)));
-        holder.event_postcode_txt.setText(String.valueOf(event_postcode.get(position)));
-        holder.event_city_txt.setText(String.valueOf(event_city.get(position)));
-        holder.event_notes_txt.setText(String.valueOf(event_notes.get(position)));
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
+        Event currentEvent = events.get(position);
 
-        // Set onClickListener for the entire item
+        // Bind the data to the ViewHolder
+        holder.bind(currentEvent);
+
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Creating an intent to open the UpdateEventActivity and pass event details
                 Intent intent = new Intent(context, UpdateEventActivity.class);
-                intent.putExtra("id",String.valueOf(event_id.get(position)));
-                intent.putExtra("title",String.valueOf(event_title.get(position)));
-                intent.putExtra("date",String.valueOf(event_date.get(position)));
-                intent.putExtra("time",String.valueOf(event_time.get(position)));
-                intent.putExtra("address",String.valueOf(event_address.get(position)));
-                intent.putExtra("postcode",String.valueOf(event_postcode.get(position)));
-                intent.putExtra("city",String.valueOf(event_city.get(position)));
-                intent.putExtra("notes",String.valueOf(event_notes.get(position)));
+                intent.putExtra("id", currentEvent.getId());
+                intent.putExtra("title", currentEvent.getTitle());
+                intent.putExtra("date", currentEvent.getDate());
+                intent.putExtra("time", currentEvent.getTime());
+                intent.putExtra("address", currentEvent.getAddress());
+                intent.putExtra("postcode", currentEvent.getPostcode());
+                intent.putExtra("city", currentEvent.getCity());
+                intent.putExtra("notes", currentEvent.getNotes());
                 context.startActivity(intent);
             }
         });
     }
 
-    // Method to return the total number of items
     @Override
     public int getItemCount() {
-        return event_id.size();
+        return events.size();
     }
 
-    // ViewHolder class to hold the views for each item in the RecyclerView
+    // Update to handle setting a list of events
+    public void setEvents(ArrayList<Event> events) {
+        this.events = events;
+        notifyDataSetChanged();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView event_title_txt, event_date_txt, event_time_txt, event_address_txt, event_postcode_txt, event_city_txt, event_notes_txt;
         LinearLayout mainLayout;
@@ -95,6 +81,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
             event_notes_txt = itemView.findViewById(R.id.event_notes_txt);
             mainLayout = itemView.findViewById(R.id.mainLayout);
         }
-    }
 
+        // Add a bind method to set data to the views
+        public void bind(Event event) {
+            event_title_txt.setText(String.valueOf(event.getTitle()));
+            event_date_txt.setText("Date: " + String.valueOf(event.getDate()));
+            event_time_txt.setText("Time: " + String.valueOf(event.getTime()));
+            event_address_txt.setText("Address: " + String.valueOf(event.getAddress()));
+            event_postcode_txt.setText("Postcode: " + String.valueOf(event.getPostcode()));
+            event_city_txt.setText("City: " + String.valueOf(event.getCity()));
+            event_notes_txt.setText("Additional Note: " + String.valueOf(event.getNotes()));
+        }
+    }
 }

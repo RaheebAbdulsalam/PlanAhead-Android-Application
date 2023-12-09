@@ -2,7 +2,9 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ import java.util.Locale;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentPlacesBinding;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.MyPlace;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlaceListAdapter;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlacesViewModel;
@@ -34,7 +37,6 @@ import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.GetNearbyPlaces;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlacesRepository;
 
 public class PlacesFragment extends Fragment {
-
     private PlacesViewModel viewModel;
     private FragmentPlacesBinding binding;
     private RecyclerView mRecyclerView;
@@ -44,14 +46,18 @@ public class PlacesFragment extends Fragment {
     private GetNearbyPlaces service;
     private Retrofit retrofit;
     private Spinner placeTypeSpinner;
+    private Button useCurrentLocationButton;
+    private LocationViewModel locationViewModel;
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
         viewModel = new ViewModelProvider(requireActivity()).get(PlacesViewModel.class);
         binding = FragmentPlacesBinding.inflate(inflater, container, false);
+        locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
+
         View view = binding.getRoot();
 
         // Initialize views
@@ -79,6 +85,20 @@ public class PlacesFragment extends Fragment {
             }
         });
 
+        // The button to use the user current location
+        useCurrentLocationButton = view.findViewById(R.id.useCurrentLocationButton);
+        useCurrentLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    useCurrentLocation();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
         // Create the Retrofit instance
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/")
@@ -99,6 +119,7 @@ public class PlacesFragment extends Fragment {
             @Override
             public void onChanged(@Nullable final List<MyPlace> placeList) {
                 // Update the UI, in this case, a Toast.
+                assert placeList != null;
                 Toast.makeText(getContext(),
                         "We got a list of " + placeList.size() + " places",
                         Toast.LENGTH_LONG).show();
@@ -117,8 +138,6 @@ public class PlacesFragment extends Fragment {
 
         viewModel.getAllPlaces().observe(getViewLifecycleOwner(), userListObserver);
     }
-
-
 
     private void performSearch(String location) {
         viewModel.getAllPlaces().getValue().clear();
@@ -150,6 +169,39 @@ public class PlacesFragment extends Fragment {
         }
     }
 
+
+    //Method to use the user current location and adding it to the search bar
+    private void useCurrentLocation() {
+        // Check if the location data is available in the ViewModel
+        Location currentLocation = locationViewModel.getCurrentLocation().getValue();
+        if (currentLocation != null) {
+            // Use Geocoder to get the address from latitude and longitude
+            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+            List<Address> addresses;
+            try {
+                addresses = geocoder.getFromLocation(
+                        currentLocation.getLatitude(),
+                        currentLocation.getLongitude(),
+                        1
+                );
+                if (addresses != null && !addresses.isEmpty()) {
+                    Address address = addresses.get(0);
+                    // Get the formatted address
+                    String addressFormatted = address.getAddressLine(0) + "\n";
+                    // Set the current address in the search bar
+                    searchLocationEditText.setText(addressFormatted);
+                } else {
+                    Toast.makeText(getContext(), "Address not found for the current location", Toast.LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                Toast.makeText(getContext(), "Error retrieving address: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(MainActivity.TAG, "Error getting address\n"+e.getMessage());
+            }
+        } else {
+            Toast.makeText(getContext(), "Current location not available", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
     @Override
     public void onDestroyView() {

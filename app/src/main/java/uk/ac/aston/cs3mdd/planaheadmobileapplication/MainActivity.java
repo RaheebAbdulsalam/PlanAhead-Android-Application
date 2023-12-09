@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (destinationId == R.id.navigation_places) {
                     getSupportActionBar().setTitle("Nearby Places");
                 } else if (destinationId == R.id.navigation_weather) {
-                    getSupportActionBar().setTitle("Weather");
+                    getSupportActionBar().setTitle("Weather Forecast");
                 }
             }
         });

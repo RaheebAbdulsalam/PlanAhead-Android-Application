@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/temperatureTextView"
@@ -79,28 +80,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:id="@+id/windTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:id="@+id/sunriseTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:id="@+id/sunsetTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 

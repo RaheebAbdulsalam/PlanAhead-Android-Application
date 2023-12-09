@@ -10,10 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-
-// Database class responsible for managing the SQLite database for events
-public class Database extends SQLiteOpenHelper {
-
+// EventDatabase class responsible for managing the SQLite database for events
+public class EventDatabase extends SQLiteOpenHelper {
     private Context context;
     private static final String DATABASE_NAME = "Events.db";
     private static final int DATABASE_VERSION = 3;
@@ -37,7 +35,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String MESSAGE_FAILED = "Failed";
     private static final String MESSAGE_SUCCESS = "Your Event has been added successfully!";
 
-    public Database(@Nullable Context context) {
+    public EventDatabase(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -67,18 +65,18 @@ public class Database extends SQLiteOpenHelper {
     }
 
     // Method to add a new event to the database
-    public void addEvent(String title, String date, String time, String address, String postcode, String city, String notes) {
+    public void addEvent(Event event) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         // Put event details into ContentValues object
-        cv.put(COLUMN_TITLE, title);
-        cv.put(COLUMN_DATE, date.toString());
-        cv.put(COLUMN_TIME, time.toString());
-        cv.put(COLUMN_ADDRESS, address);
-        cv.put(COLUMN_POSTCODE, postcode);
-        cv.put(COLUMN_CITY, city);
-        cv.put(COLUMN_NOTES, notes);
+        cv.put(COLUMN_TITLE, event.getTitle());
+        cv.put(COLUMN_DATE, event.getDate());
+        cv.put(COLUMN_TIME, event.getTime());
+        cv.put(COLUMN_ADDRESS, event.getAddress());
+        cv.put(COLUMN_POSTCODE, event.getPostcode());
+        cv.put(COLUMN_CITY, event.getCity());
+        cv.put(COLUMN_NOTES, event.getNotes());
 
         // Insert the event into the 'events' table
         long result = db.insert(TABLE_NAME, null, cv);
@@ -89,6 +87,7 @@ public class Database extends SQLiteOpenHelper {
             Toast.makeText(context, MESSAGE_SUCCESS, Toast.LENGTH_SHORT).show();
         }
     }
+
 
     // Method to retrieve all events from the database
     public Cursor readAllData() {
@@ -104,19 +103,19 @@ public class Database extends SQLiteOpenHelper {
     }
 
     // Method to update an existing event in the database
-    public void updateEvent(String row_id, String title, String date, String time, String address, String postcode, String city, String notes) {
+    public void updateEvent(Event event) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_TITLE, title);
-        cv.put(COLUMN_DATE, date.toString());
-        cv.put(COLUMN_TIME, time.toString());
-        cv.put(COLUMN_ADDRESS, address);
-        cv.put(COLUMN_POSTCODE, postcode);
-        cv.put(COLUMN_CITY, city);
-        cv.put(COLUMN_NOTES, notes);
+        cv.put(COLUMN_TITLE, event.getTitle());
+        cv.put(COLUMN_DATE, event.getDate());
+        cv.put(COLUMN_TIME, event.getTime());
+        cv.put(COLUMN_ADDRESS, event.getAddress());
+        cv.put(COLUMN_POSTCODE, event.getPostcode());
+        cv.put(COLUMN_CITY, event.getCity());
+        cv.put(COLUMN_NOTES, event.getNotes());
 
         // Update the event in the 'events' table based on the row_id
-        long result = db.update(TABLE_NAME, cv, COLUMN_ID + "=?", new String[]{row_id});
+        long result = db.update(TABLE_NAME, cv, COLUMN_ID + "=?", new String[]{event.getId()});
         Log.d("UpdateEventActivity", "Update result: " + result);
 
         if (result == -1) {
@@ -139,7 +138,6 @@ public class Database extends SQLiteOpenHelper {
             Toast.makeText(context, "The Event has been successfully deleted", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     // Method to search for events by title
     public Cursor searchData(String title) {

@@ -52,18 +52,24 @@ public class AddEventActivity extends AppCompatActivity {
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //New instance of the Database class with the current activity context
-                Database myDB = new Database(AddEventActivity.this);
-                // Add a new event to the database
-                myDB.addEvent(title_input.getText().toString().trim(),
+                EventRepository eventRepository = new EventRepository(AddEventActivity.this);
+
+                Event newEvent = new Event(
+                        null,
+                        title_input.getText().toString().trim(),
                         date_button.getText().toString().trim(),
                         time_button.getText().toString().trim(),
                         address_input.getText().toString().trim(),
                         postcode_input.getText().toString().trim(),
                         city_input.getText().toString().trim(),
-                        notes_input.getText().toString().trim());
+                        notes_input.getText().toString().trim()
+                );
+
+                // Add a new event to the database
+                eventRepository.addEvent(newEvent);
             }
         });
+
     }
 
     // Method to show the DatePickerDialog

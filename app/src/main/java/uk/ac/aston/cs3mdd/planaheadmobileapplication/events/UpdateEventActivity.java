@@ -74,19 +74,24 @@ public class UpdateEventActivity extends AppCompatActivity {
         update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Database db = new Database(UpdateEventActivity.this);
-                // Retrieve updated event details from the input fields
-                title = title_input.getText().toString().trim();
-                date = date_button.getText().toString().trim();
-                time = time_button.getText().toString().trim();
-                address = address_input.getText().toString().trim();
-                postcode = postcode_input.getText().toString().trim();
-                city = city_input.getText().toString().trim();
-                notes = notes_input.getText().toString().trim();
+                EventRepository eventRepository = new EventRepository(UpdateEventActivity.this);
+
+                Event updatedEvent = new Event(
+                        id,
+                        title_input.getText().toString().trim(),
+                        date_button.getText().toString().trim(),
+                        time_button.getText().toString().trim(),
+                        address_input.getText().toString().trim(),
+                        postcode_input.getText().toString().trim(),
+                        city_input.getText().toString().trim(),
+                        notes_input.getText().toString().trim()
+                );
+
                 // Update the event in the database
-                db.updateEvent(id, title, date, time, address, postcode, city, notes);
+                eventRepository.updateEvent(updatedEvent);
             }
         });
+
 
         // Delete Button
         delete_button.setOnClickListener(new View.OnClickListener() {
@@ -182,8 +187,8 @@ public class UpdateEventActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Database db = new Database(UpdateEventActivity.this);
-                db.deleteEvent(id);
+                EventRepository eventRepository = new EventRepository(UpdateEventActivity.this);
+                eventRepository.deleteEvent(id);
                 // Notify HomeFragment to refresh the data
                 ((HomeFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).storeDataInArrays();
                 // Finish the activity

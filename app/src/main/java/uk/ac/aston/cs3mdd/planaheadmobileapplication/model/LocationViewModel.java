@@ -6,17 +6,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.Locale;
 
 public class LocationViewModel extends ViewModel {
     private MutableLiveData<Location> currentLocation;
-
     private MutableLiveData<Boolean> locationUpdates;
 
-    private LocationViewModel() {
-        super();
+    public LocationViewModel() {
         currentLocation = new MutableLiveData<>(null);
-        locationUpdates = new MutableLiveData<Boolean>(false);
+        locationUpdates = new MutableLiveData<>(false);
     }
 
     public LiveData<Location> getCurrentLocation() {
@@ -35,6 +32,13 @@ public class LocationViewModel extends ViewModel {
         this.locationUpdates.setValue(locationUpdates);
     }
 
+    // Method to observe changes in the current location
+//    public LiveData<Location> observeCurrentLocation() {
+//        return currentLocation;
+//    }
+//
+//    // Method to update the current location
+//    public void updateCurrentLocation(Location newLocation) {
+//        currentLocation.setValue(newLocation);
+//    }
 }
-
-

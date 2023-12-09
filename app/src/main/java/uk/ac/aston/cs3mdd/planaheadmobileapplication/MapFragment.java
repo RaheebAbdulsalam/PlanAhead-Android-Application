@@ -127,6 +127,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Log.e(TAG, "searchAndMoveToLocation: IOException: " + e.getMessage());
             e.printStackTrace();
         }
+        assert list != null;
         if (list.size() > 0) {
             Address address = list.get(0);
             Log.d(TAG, "searchAndMoveToLocation: found location: " + address.toString());

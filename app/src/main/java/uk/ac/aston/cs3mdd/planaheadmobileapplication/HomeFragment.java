@@ -9,26 +9,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentHomeBinding;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Database;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Event;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventAdapter;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventRepository;
 
 public class HomeFragment extends Fragment {
+
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
-    private Database db;
-    private ArrayList<String> event_id, event_title, event_date, event_time, event_address, event_postcode, event_city, event_notes;
+    private EventRepository eventRepository;
+    private ArrayList<Event> events;
     public EventAdapter eventAdapter;
-
-    private EditText editTextSearch; // Added EditText for search
+    private EditText editTextSearch;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,65 +37,43 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize RecyclerView and Database
         recyclerView = view.findViewById(R.id.recyclerView);
-        editTextSearch = view.findViewById(R.id.editTextSearch); // Initialize EditText
-        db = new Database(requireContext());
+        editTextSearch = view.findViewById(R.id.editTextSearch);
+        eventRepository = new EventRepository(requireContext());
 
-        // Initialize ArrayLists for event details and create an EventAdapter
-        event_id = new ArrayList<>();
-        event_title = new ArrayList<>();
-        event_date = new ArrayList<>();
-        event_time = new ArrayList<>();
-        event_address = new ArrayList<>();
-        event_postcode = new ArrayList<>();
-        event_city = new ArrayList<>();
-        event_notes = new ArrayList<>();
-        eventAdapter = new EventAdapter(requireContext(), event_id, event_title, event_date, event_time, event_address, event_postcode, event_city, event_notes);
+        events = new ArrayList<>();
+        eventAdapter = new EventAdapter(requireContext(), events);
 
-        // Set the adapter and layout manager for the RecyclerView
         recyclerView.setAdapter(eventAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Fetch the arrays with data from the database
         storeDataInArrays();
-
-        // Set up the TextWatcher for EditText (search)
         setupSearchTextListener();
     }
 
-    // Method to retrieve data from the database
     public void storeDataInArrays() {
-        Cursor cursor = db.readAllData();
+        Cursor cursor = eventRepository.getAllEvents();
         if (cursor.getCount() == 0) {
             Toast.makeText(requireContext(), "No data.", Toast.LENGTH_SHORT).show();
         } else {
-            // Clear existing data before populating the arrays
-            event_id.clear();
-            event_title.clear();
-            event_date.clear();
-            event_time.clear();
-            event_address.clear();
-            event_postcode.clear();
-            event_city.clear();
-            event_notes.clear();
+            events.clear();
             while (cursor.moveToNext()) {
-                // Add data from the cursor to the arrays
-                event_id.add(cursor.getString(0));
-                event_title.add(cursor.getString(1));
-                event_date.add(cursor.getString(2));
-                event_time.add(cursor.getString(3));
-                event_address.add(cursor.getString(4));
-                event_postcode.add(cursor.getString(5));
-                event_city.add(cursor.getString(6));
-                event_notes.add(cursor.getString(7));
+                Event event = new Event(
+                        cursor.getString(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getString(5),
+                        cursor.getString(6),
+                        cursor.getString(7)
+                );
+                events.add(event);
             }
-            // Notify the adapter that the data has changed
             eventAdapter.notifyDataSetChanged();
         }
     }
-// Search and Filter Events by their titles //
-    // Method to set up TextWatcher for EditText (search)
+
     private void setupSearchTextListener() {
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -105,7 +81,6 @@ public class HomeFragment extends Fragment {
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                // Handle search query change
                 filter(charSequence.toString());
             }
             @Override
@@ -114,27 +89,27 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    // Method to filter the data based on the search query
     private void filter(String query) {
         Cursor cursor;
         if (query.isEmpty()) {
-            // If the query is empty, load all data
-            cursor = db.readAllData();
+            cursor = eventRepository.getAllEvents();
         } else {
-            // If there is a search query, load filtered data
-            cursor = db.searchData(query);
+            cursor = eventRepository.searchEvents(query);
         }
-        // Clear existing data before populating the arrays
-        event_id.clear();
-        event_title.clear();
-
-        // Populate the arrays with data from the cursor
+        events.clear();
         while (cursor.moveToNext()) {
-            // Add data from the cursor to the arrays
-            event_id.add(cursor.getString(0));
-            event_title.add(cursor.getString(1));
+            Event event = new Event(
+                    cursor.getString(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getString(6),
+                    cursor.getString(7)
+            );
+            events.add(event);
         }
-        // Notify the adapter that the data has changed
         eventAdapter.notifyDataSetChanged();
     }
 

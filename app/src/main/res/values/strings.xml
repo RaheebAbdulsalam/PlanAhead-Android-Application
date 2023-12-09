@@ -23,17 +23,20 @@
     <string name="event_date_time_format">%s %s</string>
     <string name="event_location_format">%s</string>
 
+    <!--Map and Places-->
     <string name="map_description">Map view for displaying location information</string>
     <string name="search">Search Nearby Places</string>
     <string name="enter_location"> Please Enter your Event\'s Location</string>
     <string name="enter_address_or_postcode">Enter your event\'s Address or Postcode</string>
     <string name="search_map">Search</string>
     <string name="place_icon">Place icon</string>
+    <string name="search_events_by_title">Search for your special event</string>
+    <string name="use_current_location">Use my Location</string>
 
     <!-- Weather Layout -->
     <string name="check_weather">Check the Weather</string>
     <string name="event_weather_editText">Enter your event location</string>
     <string name="weather_icon">Weather Icon</string>
-    <string name="search_events_by_title">Search for your special event</string>
+
 
 </resources>
