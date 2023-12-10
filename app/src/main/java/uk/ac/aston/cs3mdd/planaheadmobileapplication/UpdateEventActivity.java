@@ -1,9 +1,8 @@
-package uk.ac.aston.cs3mdd.planaheadmobileapplication.events;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -20,14 +19,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.HomeFragment;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.R;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Event;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventViewModel;
 
 // Activity class for updating and deleting an event
 public class UpdateEventActivity extends AppCompatActivity {
-    EditText title_input, address_input, postcode_input, city_input, notes_input;
-    Button date_button, time_button, update_button, delete_button;
-    String id, title, date, time, address, postcode, city, notes;
+    private EditText title_input, address_input, postcode_input, city_input, notes_input;
+    private Button date_button, time_button, update_button, delete_button;
+    private String id, title, date, time, address, postcode, city, notes;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -74,7 +73,7 @@ public class UpdateEventActivity extends AppCompatActivity {
         update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventRepository eventRepository = new EventRepository(UpdateEventActivity.this);
+                EventViewModel eventViewModel = new EventViewModel(UpdateEventActivity.this.getApplication());
 
                 Event updatedEvent = new Event(
                         id,
@@ -88,7 +87,7 @@ public class UpdateEventActivity extends AppCompatActivity {
                 );
 
                 // Update the event in the database
-                eventRepository.updateEvent(updatedEvent);
+                eventViewModel.updateEvent(updatedEvent);
             }
         });
 
@@ -102,6 +101,62 @@ public class UpdateEventActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Retrieve event data from the Intent
+    public void getIntentDataEvent() {
+        if (getIntent().hasExtra("id") && getIntent().hasExtra("title") &&
+                getIntent().hasExtra("date") && getIntent().hasExtra("time") &&
+                getIntent().hasExtra("address") &&
+                getIntent().hasExtra("postcode") &&
+                getIntent().hasExtra("city") && getIntent().hasExtra("notes")) {
+            // Getting Data from Intent
+            id = getIntent().getStringExtra("id");
+            title = getIntent().getStringExtra("title");
+            date = getIntent().getStringExtra("date");
+            time = getIntent().getStringExtra("time");
+            address = getIntent().getStringExtra("address");
+            postcode = getIntent().getStringExtra("postcode");
+            city = getIntent().getStringExtra("city");
+            notes = getIntent().getStringExtra("notes");
+
+            // Setting Intent Data to input fields
+            title_input.setText(title);
+            date_button.setText(date);
+            time_button.setText(time);
+            address_input.setText(address);
+            postcode_input.setText(postcode);
+            city_input.setText(city);
+            notes_input.setText(notes);
+        } else {
+            Toast.makeText(this, "No data.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // A method to display a confirmation dialog before deleting the event
+    public void confirmMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(" Delete " + title + " ? ");
+        builder.setMessage(" Are you sure you want to delete " + title + " ? ");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EventViewModel eventViewModel = new EventViewModel(UpdateEventActivity.this.getApplication());
+                eventViewModel.deleteEvent(id);
+                // Notify HomeFragment to refresh the data
+                ((HomeFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).storeDataInArrays();
+                // Finish the activity
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Cancel the delete process if the user chooses not to delete
+            }
+        });
+        builder.create().show();
+    }
+
 
     // Method to show the DatePickerDialog
     private void showDatePickerDialog() {
@@ -147,60 +202,5 @@ public class UpdateEventActivity extends AppCompatActivity {
 
         // Show the TimePickerDialog
         timePickerDialog.show();
-    }
-
-    // Retrieve event data from the Intent
-    public void getIntentDataEvent() {
-        if (getIntent().hasExtra("id") && getIntent().hasExtra("title") &&
-                getIntent().hasExtra("date") && getIntent().hasExtra("time") &&
-                getIntent().hasExtra("address") &&
-                getIntent().hasExtra("postcode") &&
-                getIntent().hasExtra("city") && getIntent().hasExtra("notes")) {
-            // Getting Data from Intent
-            id = getIntent().getStringExtra("id");
-            title = getIntent().getStringExtra("title");
-            date = getIntent().getStringExtra("date");
-            time = getIntent().getStringExtra("time");
-            address = getIntent().getStringExtra("address");
-            postcode = getIntent().getStringExtra("postcode");
-            city = getIntent().getStringExtra("city");
-            notes = getIntent().getStringExtra("notes");
-
-            // Setting Intent Data to input fields
-            title_input.setText(title);
-            date_button.setText(date);
-            time_button.setText(time);
-            address_input.setText(address);
-            postcode_input.setText(postcode);
-            city_input.setText(city);
-            notes_input.setText(notes);
-        } else {
-            Toast.makeText(this, "No data.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // A method to display a confirmation dialog before deleting the event
-    public void confirmMessage() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(" Delete " + title + " ? ");
-        builder.setMessage(" Are you sure you want to delete " + title + " ? ");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EventRepository eventRepository = new EventRepository(UpdateEventActivity.this);
-                eventRepository.deleteEvent(id);
-                // Notify HomeFragment to refresh the data
-                ((HomeFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).storeDataInArrays();
-                // Finish the activity
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Cancel the delete process if the user chooses not to delete
-            }
-        });
-        builder.create().show();
     }
 }

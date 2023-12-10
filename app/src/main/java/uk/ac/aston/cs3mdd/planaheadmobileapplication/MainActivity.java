@@ -35,7 +35,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.ActivityMainBinding;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.AddEventActivity;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.SingletonData;
 

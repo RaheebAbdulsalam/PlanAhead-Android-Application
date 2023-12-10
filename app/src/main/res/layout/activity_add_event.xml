@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="30dp"
-    tools:context=".events.AddEventActivity">
+    tools:context=".AddEventActivity">
+
 
     <!-- Title Section -->
 
@@ -15,12 +16,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Event Title"
+        android:text="@string/event_title"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"/>
 
     <!-- Date and Time Section -->
 
@@ -45,12 +47,13 @@
         android:id="@+id/date_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Date and Time"
+        android:text="@string/event_date_and_time"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/title_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="24dp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:id="@+id/date_time_layout"
@@ -92,11 +95,12 @@
         android:id="@+id/address_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Address"
+        android:text="@string/event_address"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/date_time_layout"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="24dp"
+        android:textStyle="bold"/>
 
     <EditText
         android:id="@+id/address_input"
@@ -111,8 +115,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:autofillHints="postalAddress"
-        tools:ignore="VisualLintTextFieldSize" />
+        tools:ignore="VisualLintTextFieldSize"
+        />
 
+    <!-- Postcode and City Section -->
     <LinearLayout
         android:id="@+id/postcode_city_layout"
         android:layout_width="0dp"
@@ -123,45 +129,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp">
 
-        <TextView
-            android:id="@+id/postcode_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Postcode"
-            android:textSize="18sp"
-            android:layout_marginEnd="8dp"/>
-
         <EditText
             android:id="@+id/postcode_input"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/hint_event_postcode"
-            android:inputType="textPostalAddress"
-            android:minHeight="48dp"
-            android:autofillHints="postalCode"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:layout_weight="0.6"
+        android:layout_height="wrap_content"
+        android:ems="6"
+        android:hint="@string/hint_event_postcode"
+        android:inputType="textPostalAddress"
+        android:minHeight="48dp"
+        android:autofillHints="postalCode"
+        tools:ignore="VisualLintTextFieldSize" />
 
-        <TextView
-            android:id="@+id/city_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="City"
-            android:textSize="18sp"
-            android:layout_marginStart="8dp"/>
 
         <EditText
             android:id="@+id/city_input"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/hint_event_city"
-            android:inputType="textPostalAddress"
-            android:minHeight="48dp"
-            android:autofillHints="city"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:layout_weight="1.2"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/hint_event_city"
+        android:inputType="textPostalAddress"
+        android:minHeight="48dp"
+        android:autofillHints="city"
+        tools:ignore="VisualLintTextFieldSize" />
     </LinearLayout>
 
     <!-- Notes Section -->
@@ -169,14 +160,12 @@
         android:id="@+id/notes_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Notes"
+        android:text="@string/event_notes"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/postcode_city_layout"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="24dp" />
-
-
-    <!-- Save Button -->
+        android:layout_marginTop="24dp"
+        android:textStyle="bold"/>
 
     <EditText
         android:id="@+id/notes_input"
@@ -196,17 +185,18 @@
         app:layout_constraintTop_toBottomOf="@+id/notes_label"
         tools:ignore="VisualLintTextFieldSize" />
 
+    <!-- Save Button -->
     <Button
         android:id="@+id/save_button"
-        android:layout_width="0dp"
+        android:layout_width="284dp"
         android:layout_height="70dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:text="@string/button_save"
         android:textAllCaps="false"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/notes_input"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notes_input"
         tools:ignore="VisualLintButtonSize" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

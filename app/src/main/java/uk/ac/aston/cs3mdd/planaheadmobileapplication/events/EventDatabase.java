@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 // EventDatabase class responsible for managing the SQLite database for events
 public class EventDatabase extends SQLiteOpenHelper {
-    private Context context;
+    private final Context context;
     private static final String DATABASE_NAME = "Events.db";
     private static final int DATABASE_VERSION = 3;
     private static final String TABLE_NAME = "events";
@@ -65,7 +65,7 @@ public class EventDatabase extends SQLiteOpenHelper {
     }
 
     // Method to add a new event to the database
-    public void addEvent(Event event) {
+    public long addEvent(Event event) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -86,6 +86,7 @@ public class EventDatabase extends SQLiteOpenHelper {
         } else {
             Toast.makeText(context, MESSAGE_SUCCESS, Toast.LENGTH_SHORT).show();
         }
+        return result;
     }
 
 

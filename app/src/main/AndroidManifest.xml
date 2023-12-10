@@ -16,11 +16,11 @@
         android:theme="@style/Theme.PlanAheadMobileApplication"
         tools:targetApi="31">
         <activity
-            android:name=".events.UpdateEventActivity"
+            android:name=".UpdateEventActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".events.AddEventActivity"
+            android:name=".AddEventActivity"
             android:exported="false"
             android:label="Add Event"
             android:parentActivityName=".MainActivity" />

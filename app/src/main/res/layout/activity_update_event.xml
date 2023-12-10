@@ -1,157 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="30dp"
-    tools:context=".events.UpdateEventActivity">
+    tools:context=".UpdateEventActivity">
 
-    <!-- Title -->
+    <!-- Title Section -->
+
+    <TextView
+        android:id="@+id/title_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/event_title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Date and Time Section -->
+
     <EditText
         android:id="@+id/title_input_update"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints="Title"
         android:ems="10"
         android:hint="@string/hint_event_title"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:autofillHints="Title"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#2D2F31"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_label"
         tools:ignore="VisualLintTextFieldSize" />
 
-    <!-- Date and Time Section -->
+    <TextView
+        android:id="@+id/date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/event_date_and_time"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_input_update" />
+
     <LinearLayout
         android:id="@+id/date_time_layout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/title_input_update"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_label">
 
+        <!-- Replace EditText with Button for Date -->
         <Button
             android:id="@+id/date_button_update"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/hint_event_date"
+            android:layout_weight="1"
             android:minHeight="48dp"
             android:onClick="onDateButtonClick"
+            android:text="@string/hint_event_date"
             tools:ignore="VisualLintButtonSize" />
 
+        <!-- Replace EditText with Button for Time -->
         <Button
             android:id="@+id/time_button_update"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/hint_event_time"
+            android:layout_weight="1"
             android:minHeight="48dp"
             android:onClick="onTimeButtonClick"
+            android:text="@string/hint_event_time"
             tools:ignore="VisualLintButtonSize" />
     </LinearLayout>
 
     <!-- Address Section (address, postcode, and city) -->
-    <EditText
-        android:id="@+id/address_input_update"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/address_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:text="@string/event_address"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_time_layout" />
+
+    <EditText
+        android:id="@+id/address_input_update"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:autofillHints="postalAddress"
         android:ems="10"
         android:hint="@string/hint_event_address"
         android:inputType="textPostalAddress"
         android:minHeight="48dp"
-        app:layout_constraintTop_toBottomOf="@+id/date_time_layout"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:autofillHints="postalAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/address_label"
         tools:ignore="VisualLintTextFieldSize" />
 
+    <!-- Postcode and City Section -->
     <LinearLayout
         android:id="@+id/postcode_city_layout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/address_input_update"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/address_input_update">
 
         <EditText
             android:id="@+id/postcode_input_update"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_weight="0.6"
+            android:autofillHints="postalCode"
+            android:ems="6"
             android:hint="@string/hint_event_postcode"
             android:inputType="textPostalAddress"
             android:minHeight="48dp"
-            android:autofillHints="postalCode"
             tools:ignore="VisualLintTextFieldSize" />
+
 
         <EditText
             android:id="@+id/city_input_update"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:autofillHints="city"
             android:ems="10"
             android:hint="@string/hint_event_city"
             android:inputType="textPostalAddress"
             android:minHeight="48dp"
-            android:autofillHints="city"
             tools:ignore="VisualLintTextFieldSize" />
     </LinearLayout>
 
-
     <!-- Notes Section -->
-    <EditText
-        android:id="@+id/notes_input_update"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/notes_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="@string/hint_event_note"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:autofillHints="text"
-        app:layout_constraintTop_toBottomOf="@+id/postcode_city_layout"
+        android:text="@string/event_notes"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postcode_city_layout" />
+
+    <EditText
+        android:id="@+id/notes_input_update"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:autofillHints="text"
+        android:gravity="top"
+        android:hint="@string/hint_event_note"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:minHeight="48dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notes_label"
         tools:ignore="VisualLintTextFieldSize" />
 
     <!-- Buttons -->
-    <Button
-        android:id="@+id/update_button"
+    <LinearLayout
+        android:id="@+id/buttons_layout"
         android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/button_update"
-        android:textAllCaps="false"
-        android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/notes_input_update"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="VisualLintButtonSize" />
-
-    <Button
-        android:id="@+id/delete_button"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/button_delete"
-        android:textAllCaps="false"
-        android:textColor="@color/lightRed"
-        android:textSize="20sp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/update_button"
-        tools:ignore="VisualLintButtonSize" />
+        app:layout_constraintTop_toBottomOf="@+id/notes_input_update">
+
+        <Button
+            android:id="@+id/update_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="1"
+            android:text="@string/button_update"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            tools:ignore="VisualLintButtonSize" />
+
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="@string/button_delete"
+            android:textAllCaps="false"
+            android:textColor="@color/lightRed"
+            android:textSize="20sp"
+            tools:ignore="VisualLintButtonSize" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

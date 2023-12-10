@@ -10,7 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.List;
+
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.R;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.UpdateEventActivity;
 
 // Adapter class for RecyclerView to display events
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder> {
@@ -61,8 +64,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
     }
 
     // Update to handle setting a list of events
-    public void setEvents(ArrayList<Event> events) {
-        this.events = events;
+    public void setEvents(List<Event> events) {
+        this.events = new ArrayList<>(events);
         notifyDataSetChanged();
     }
 
@@ -88,8 +91,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
             event_date_txt.setText("Date: " + String.valueOf(event.getDate()));
             event_time_txt.setText("Time: " + String.valueOf(event.getTime()));
             event_address_txt.setText("Address: " + String.valueOf(event.getAddress()));
-            event_postcode_txt.setText("Postcode: " + String.valueOf(event.getPostcode()));
-            event_city_txt.setText("City: " + String.valueOf(event.getCity()));
+            event_postcode_txt.setText(String.valueOf(event.getPostcode()));
+            event_city_txt.setText(String.valueOf(event.getCity()));
             event_notes_txt.setText("Additional Note: " + String.valueOf(event.getNotes()));
         }
     }

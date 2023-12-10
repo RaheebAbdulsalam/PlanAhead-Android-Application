@@ -10,10 +10,10 @@
     <string name="add">Add Button</string>
 
     <!--    Events form (Add Event & Update Event)-->
-    <string name="hint_event_title">Event Title</string>
+    <string name="hint_event_title">E.g., Appointment, Interview, etc.</string>
     <string name="hint_event_date">Event Date</string>
     <string name="hint_event_time">Event Time</string>
-    <string name="hint_event_address">Address</string>
+    <string name="hint_event_address">Street</string>
     <string name="hint_event_postcode">Postcode</string>
     <string name="hint_event_city">City</string>
     <string name="hint_event_note">Add notes about the event...</string>
@@ -22,6 +22,10 @@
     <string name="button_delete">Delete</string>
     <string name="event_date_time_format">%s %s</string>
     <string name="event_location_format">%s</string>
+    <string name="event_address">Event Address</string>
+    <string name="event_title">Event Title</string>
+    <string name="event_date_and_time">Event Date and Time</string>
+    <string name="event_notes">Additional Notes</string>
 
     <!--Map and Places-->
     <string name="map_description">Map view for displaying location information</string>

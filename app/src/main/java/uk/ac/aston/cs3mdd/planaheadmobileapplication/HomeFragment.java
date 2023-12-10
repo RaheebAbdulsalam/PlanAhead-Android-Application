@@ -11,21 +11,22 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentHomeBinding;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Event;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventAdapter;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventRepository;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventViewModel;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
-    private EventRepository eventRepository;
+    private EventViewModel eventViewModel;
     private ArrayList<Event> events;
-    public EventAdapter eventAdapter;
+    private EventAdapter eventAdapter;
     private EditText editTextSearch;
 
     @Override
@@ -39,7 +40,9 @@ public class HomeFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
         editTextSearch = view.findViewById(R.id.editTextSearch);
-        eventRepository = new EventRepository(requireContext());
+
+        // Replace YourApplication with the actual name of your application class
+        eventViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication())).get(EventViewModel.class);
 
         events = new ArrayList<>();
         eventAdapter = new EventAdapter(requireContext(), events);
@@ -52,7 +55,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void storeDataInArrays() {
-        Cursor cursor = eventRepository.getAllEvents();
+        Cursor cursor = eventViewModel.getAllEvents();
         if (cursor.getCount() == 0) {
             Toast.makeText(requireContext(), "No data.", Toast.LENGTH_SHORT).show();
         } else {
@@ -79,10 +82,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 filter(charSequence.toString());
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
             }
@@ -92,9 +97,9 @@ public class HomeFragment extends Fragment {
     private void filter(String query) {
         Cursor cursor;
         if (query.isEmpty()) {
-            cursor = eventRepository.getAllEvents();
+            cursor = eventViewModel.getAllEvents();
         } else {
-            cursor = eventRepository.searchEvents(query);
+            cursor = eventViewModel.searchEvents(query);
         }
         events.clear();
         while (cursor.moveToNext()) {

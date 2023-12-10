@@ -5,7 +5,6 @@ import android.database.Cursor;
 
 public class EventRepository {
     private final EventDatabase eventDatabase;
-
     public EventRepository(Context context) {
         this.eventDatabase = new EventDatabase(context);
     }
@@ -26,6 +25,5 @@ public class EventRepository {
     public Cursor searchEvents(String title) {
         return eventDatabase.searchData(title);
     }
-
 
 }

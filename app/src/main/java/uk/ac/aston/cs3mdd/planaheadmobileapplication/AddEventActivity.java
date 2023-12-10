@@ -1,4 +1,4 @@
-package uk.ac.aston.cs3mdd.planaheadmobileapplication.events;
+package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -11,12 +11,14 @@ import android.widget.TimePicker;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.R;
+
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Event;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventViewModel;
 
 // Activity class for adding a new event
 public class AddEventActivity extends AppCompatActivity {
-    EditText title_input,  address_input, postcode_input, city_input, notes_input;
-    Button date_button, time_button, save_button;
+    private EditText title_input,  address_input, postcode_input, city_input, notes_input;
+    private Button date_button, time_button, save_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class AddEventActivity extends AppCompatActivity {
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventRepository eventRepository = new EventRepository(AddEventActivity.this);
+                EventViewModel eventViewModel = new EventViewModel(AddEventActivity.this.getApplication());
 
                 Event newEvent = new Event(
                         null,
@@ -66,9 +68,11 @@ public class AddEventActivity extends AppCompatActivity {
                 );
 
                 // Add a new event to the database
-                eventRepository.addEvent(newEvent);
+                eventViewModel.addEvent(newEvent);
+
             }
         });
+
 
     }
 
@@ -117,4 +121,6 @@ public class AddEventActivity extends AppCompatActivity {
         // Show the TimePickerDialog
         timePickerDialog.show();
     }
+
+
 }

@@ -70,37 +70,43 @@
                 app:layout_constraintTop_toBottomOf="@+id/event_time_txt" />
 
             <!-- Event Postcode TextView -->
+
+            <!-- Event City TextView -->
+
+            <!-- Event Notes TextView -->
+
             <TextView
                 android:id="@+id/event_postcode_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textSize="16sp"
+                android:layout_marginStart="68dp"
+                android:layout_marginTop="8dp"
                 android:textColor="@color/black"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_address_txt" />
 
-            <!-- Event City TextView -->
             <TextView
                 android:id="@+id/event_city_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="68dp"
                 android:layout_marginTop="4dp"
-                android:textSize="16sp"
                 android:textColor="@color/black"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_postcode_txt" />
 
-            <!-- Event Notes TextView -->
             <TextView
                 android:id="@+id/event_notes_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:maxLines="100"
-                android:textSize="16sp"
                 android:textColor="@color/black"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.012"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_city_txt" />
 
