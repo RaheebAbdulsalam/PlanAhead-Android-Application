@@ -1,10 +1,38 @@
 package uk.ac.aston.cs3mdd.planaheadmobileapplication.events;
 
-public class Event {
-    private String id, title, date, time, address, postcode, city, notes;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    public Event(String id, String title, String date, String time, String address, String postcode, String city, String notes) {
-        this.id = id;
+@Entity(tableName = "events_table")
+public class Event {
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    private int id;
+
+    @ColumnInfo(name = "title")
+    private String title;
+
+    @ColumnInfo(name = "date")
+    private String date;
+
+    @ColumnInfo(name = "time")
+    private String time;
+
+    @ColumnInfo(name = "address")
+    private String address;
+
+    @ColumnInfo(name = "postcode")
+    private String postcode;
+
+    @ColumnInfo(name = "city")
+    private String city;
+    @ColumnInfo(name = "notes")
+    private String notes;
+
+
+    public Event(@NonNull String title, String date, String time, String address, String postcode, String city, String notes) {
         this.title = title;
         this.date = date;
         this.time = time;
@@ -13,15 +41,12 @@ public class Event {
         this.city = city;
         this.notes = notes;
     }
-    public Event() {
-        // Default constructor
-    }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -80,4 +105,5 @@ public class Event {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
 }

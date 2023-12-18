@@ -5,6 +5,14 @@
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- Setting the action bar theme to customize its appearance -->
+        <item name="actionBarTheme">@style/MyActionBarTheme</item>
+    </style>
+
+    <!-- Defining a style for the action bar theme -->
+    <style name="MyActionBarTheme" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <!-- Setting the text color for the action bar title -->
+        <item name="android:textColorPrimary">@color/white</item>
     </style>
 
     <style name="Theme.PlanAheadMobileApplication" parent="Base.Theme.PlanAheadMobileApplication" />

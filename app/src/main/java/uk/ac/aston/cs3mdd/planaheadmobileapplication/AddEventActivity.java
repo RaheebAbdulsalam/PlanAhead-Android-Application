@@ -1,80 +1,80 @@
 package uk.ac.aston.cs3mdd.planaheadmobileapplication;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.view.View;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import androidx.appcompat.app.AppCompatActivity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Event;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventViewModel;
 
-// Activity class for adding a new event
 public class AddEventActivity extends AppCompatActivity {
-    private EditText title_input,  address_input, postcode_input, city_input, notes_input;
+    private EditText title_input, address_input, postcode_input, city_input, notes_input;
     private Button date_button, time_button, save_button;
+    private EventViewModel eventViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        // Initialising the layout elements by finding them using their IDs
+        // Initialising UI elements
         title_input = findViewById(R.id.title_input);
         date_button = findViewById(R.id.date_button);
-        time_button= findViewById(R.id.time_button);
+        time_button = findViewById(R.id.time_button);
         address_input = findViewById(R.id.address_input);
         postcode_input = findViewById(R.id.postcode_input);
         city_input = findViewById(R.id.city_input);
         notes_input = findViewById(R.id.notes_input);
+
+        // Initialize save_button
         save_button = findViewById(R.id.save_button);
 
-        // Set up a DatePickerDialog for the date_button
-        date_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePickerDialog();
-            }
-        });
+        // Initialize EventRepository
+        eventViewModel = new EventViewModel(getApplication());
 
-        // Set up a TimePickerDialog for the time_button
-        time_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTimePickerDialog();
-            }
-        });
+        // Set click listeners for date and time buttons
+        date_button.setOnClickListener(v -> showDatePickerDialog());
+        time_button.setOnClickListener(v -> showTimePickerDialog());
 
-        save_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventViewModel eventViewModel = new EventViewModel(AddEventActivity.this.getApplication());
-
-                Event newEvent = new Event(
-                        null,
-                        title_input.getText().toString().trim(),
-                        date_button.getText().toString().trim(),
-                        time_button.getText().toString().trim(),
-                        address_input.getText().toString().trim(),
-                        postcode_input.getText().toString().trim(),
-                        city_input.getText().toString().trim(),
-                        notes_input.getText().toString().trim()
-                );
-
-                // Add a new event to the database
-                eventViewModel.addEvent(newEvent);
-
-            }
-        });
-
-
+        save_button.setOnClickListener(view -> saveEvent());
     }
+
+    private void saveEvent() {
+        // Check if the title is empty; if yes, do not save
+        if (TextUtils.isEmpty(title_input.getText())) {
+            setResult(RESULT_CANCELED);
+        } else {
+            // Retrieve values from EditText fields
+            String title = title_input.getText().toString();
+            String date = date_button.getText().toString();
+            String time = time_button.getText().toString();
+            String address = address_input.getText().toString();
+            String postcode = postcode_input.getText().toString();
+            String city = city_input.getText().toString();
+            String notes = notes_input.getText().toString();
+
+            // Create an Event object
+            Event event = new Event(title, date, time, address, postcode, city, notes);
+
+            // Insert the event into the database using the repository
+            eventViewModel.insert(event);
+
+            // Set the result to RESULT_OK
+            setResult(RESULT_OK);
+        }
+
+        // Finish the activity
+        finish();
+    }
+
 
     // Method to show the DatePickerDialog
     private void showDatePickerDialog() {
@@ -121,6 +121,4 @@ public class AddEventActivity extends AppCompatActivity {
         // Show the TimePickerDialog
         timePickerDialog.show();
     }
-
-
 }

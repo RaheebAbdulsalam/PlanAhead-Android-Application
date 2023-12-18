@@ -32,13 +32,4 @@ public class LocationViewModel extends ViewModel {
         this.locationUpdates.setValue(locationUpdates);
     }
 
-    // Method to observe changes in the current location
-//    public LiveData<Location> observeCurrentLocation() {
-//        return currentLocation;
-//    }
-//
-//    // Method to update the current location
-//    public void updateCurrentLocation(Location newLocation) {
-//        currentLocation.setValue(newLocation);
-//    }
 }

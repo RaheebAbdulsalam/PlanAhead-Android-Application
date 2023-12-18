@@ -52,7 +52,7 @@
         android:contentDescription="@string/add"
         android:foregroundTint="@color/white"
         android:src="@drawable/ic_add"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/colorAccent"
         app:layout_anchor="@id/bottomAppBar"
         app:tint="@color/white"
         tools:ignore="RedundantDescriptionCheck" />

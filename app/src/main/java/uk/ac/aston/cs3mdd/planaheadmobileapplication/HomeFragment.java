@@ -1,6 +1,6 @@
 package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,119 +8,73 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
-import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentHomeBinding;
+
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Event;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventAdapter;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventViewModel;
 
-public class HomeFragment extends Fragment {
-
-    private FragmentHomeBinding binding;
-    private RecyclerView recyclerView;
+public class HomeFragment extends Fragment implements EventAdapter.EventClickCallback {
     private EventViewModel eventViewModel;
-    private ArrayList<Event> events;
     private EventAdapter eventAdapter;
-    private EditText editTextSearch;
 
+    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        recyclerView = view.findViewById(R.id.recyclerView);
-        editTextSearch = view.findViewById(R.id.editTextSearch);
-
-        // Replace YourApplication with the actual name of your application class
-        eventViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication())).get(EventViewModel.class);
-
-        events = new ArrayList<>();
-        eventAdapter = new EventAdapter(requireContext(), events);
-
-        recyclerView.setAdapter(eventAdapter);
+        // Initialize RecyclerView
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        storeDataInArrays();
-        setupSearchTextListener();
-    }
+        // Initialize EventAdapter with the click callback
+        eventAdapter = new EventAdapter(new EventAdapter.EventDiff(), this);
+        recyclerView.setAdapter(eventAdapter);
 
-    public void storeDataInArrays() {
-        Cursor cursor = eventViewModel.getAllEvents();
-        if (cursor.getCount() == 0) {
-            Toast.makeText(requireContext(), "No data.", Toast.LENGTH_SHORT).show();
-        } else {
-            events.clear();
-            while (cursor.moveToNext()) {
-                Event event = new Event(
-                        cursor.getString(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4),
-                        cursor.getString(5),
-                        cursor.getString(6),
-                        cursor.getString(7)
-                );
-                events.add(event);
-            }
-            eventAdapter.notifyDataSetChanged();
-        }
-    }
+        // Initialize EventViewModel
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
-    private void setupSearchTextListener() {
+        // Observe LiveData and update RecyclerView
+        eventViewModel.getAllEvents().observe(getViewLifecycleOwner(), events -> {
+            // Update the UI with the new list of events
+            eventAdapter.submitList(events);
+        });
+
+        //search and filter
+        EditText editTextSearch = view.findViewById(R.id.editTextSearch);
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int after) {
             }
-
             @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                filter(charSequence.toString());
+            public void onTextChanged(CharSequence charSequence, int start, int before, int after) {
+                String searchQuery = charSequence.toString().trim();
+                searchEvents(searchQuery);
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
             }
         });
+
+        return view;
     }
 
-    private void filter(String query) {
-        Cursor cursor;
-        if (query.isEmpty()) {
-            cursor = eventViewModel.getAllEvents();
-        } else {
-            cursor = eventViewModel.searchEvents(query);
-        }
-        events.clear();
-        while (cursor.moveToNext()) {
-            Event event = new Event(
-                    cursor.getString(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3),
-                    cursor.getString(4),
-                    cursor.getString(5),
-                    cursor.getString(6),
-                    cursor.getString(7)
-            );
-            events.add(event);
-        }
-        eventAdapter.notifyDataSetChanged();
+    private void searchEvents(String title) {
+        eventViewModel.searchEventsByTitle(title).observe(this, events -> {
+            eventAdapter.submitList(events);
+        });
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public void onItemClick(Event event) {
+        Intent intent = new Intent(requireContext(), UpdateEventActivity.class);
+        intent.putExtra("EVENT_ID", event.getId());
+        startActivity(intent);
     }
 }

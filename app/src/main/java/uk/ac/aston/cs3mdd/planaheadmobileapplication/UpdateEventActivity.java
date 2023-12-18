@@ -1,19 +1,21 @@
 package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import android.annotation.SuppressLint;
+
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,141 +24,124 @@ import java.util.Locale;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Event;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventViewModel;
 
-// Activity class for updating and deleting an event
 public class UpdateEventActivity extends AppCompatActivity {
-    private EditText title_input, address_input, postcode_input, city_input, notes_input;
-    private Button date_button, time_button, update_button, delete_button;
-    private String id, title, date, time, address, postcode, city, notes;
 
-    @SuppressLint("MissingInflatedId")
+    private EditText titleInput, addressInput, postcodeInput, cityInput, notesInput;
+    private Button dateButton, timeButton, updateButton, deleteButton;
+    private EventViewModel eventViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_event);
-        // Initialising layout elements by finding them using their IDs
-        title_input = findViewById(R.id.title_input_update);
-        date_button = findViewById(R.id.date_button_update);
-        time_button = findViewById(R.id.time_button_update);
-        address_input = findViewById(R.id.address_input_update);
-        postcode_input = findViewById(R.id.postcode_input_update);
-        city_input = findViewById(R.id.city_input_update);
-        notes_input = findViewById(R.id.notes_input_update);
-        update_button = findViewById(R.id.update_button);
-        delete_button = findViewById(R.id.delete_button);
 
-        // Retrieve data from the Intent
-        getIntentDataEvent();
+        titleInput = findViewById(R.id.title_input_update);
+        dateButton = findViewById(R.id.date_button_update);
+        timeButton = findViewById(R.id.time_button_update);
+        addressInput = findViewById(R.id.address_input_update);
+        postcodeInput = findViewById(R.id.postcode_input_update);
+        cityInput = findViewById(R.id.city_input_update);
+        notesInput = findViewById(R.id.notes_input_update);
 
-        // Setting the Event Title as the action bar title when clicking on an event
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(title);
-        }
+        updateButton = findViewById(R.id.update_button);
+        deleteButton = findViewById(R.id.delete_button);
 
-        // Set up a DatePickerDialog for the date_button
-        date_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePickerDialog();
-            }
-        });
+        // Initialize the ViewModel
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
-        // Set up a TimePickerDialog for the time_button
-        time_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTimePickerDialog();
-            }
-        });
-
-        // Update Button
-        update_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventViewModel eventViewModel = new EventViewModel(UpdateEventActivity.this.getApplication());
-
-                Event updatedEvent = new Event(
-                        id,
-                        title_input.getText().toString().trim(),
-                        date_button.getText().toString().trim(),
-                        time_button.getText().toString().trim(),
-                        address_input.getText().toString().trim(),
-                        postcode_input.getText().toString().trim(),
-                        city_input.getText().toString().trim(),
-                        notes_input.getText().toString().trim()
-                );
-
-                // Update the event in the database
-                eventViewModel.updateEvent(updatedEvent);
-            }
-        });
-
-
-        // Delete Button
-        delete_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Show a confirmation dialog before deleting the event
-                confirmMessage();
-            }
-        });
-    }
-
-    // Retrieve event data from the Intent
-    public void getIntentDataEvent() {
-        if (getIntent().hasExtra("id") && getIntent().hasExtra("title") &&
-                getIntent().hasExtra("date") && getIntent().hasExtra("time") &&
-                getIntent().hasExtra("address") &&
-                getIntent().hasExtra("postcode") &&
-                getIntent().hasExtra("city") && getIntent().hasExtra("notes")) {
-            // Getting Data from Intent
-            id = getIntent().getStringExtra("id");
-            title = getIntent().getStringExtra("title");
-            date = getIntent().getStringExtra("date");
-            time = getIntent().getStringExtra("time");
-            address = getIntent().getStringExtra("address");
-            postcode = getIntent().getStringExtra("postcode");
-            city = getIntent().getStringExtra("city");
-            notes = getIntent().getStringExtra("notes");
-
-            // Setting Intent Data to input fields
-            title_input.setText(title);
-            date_button.setText(date);
-            time_button.setText(time);
-            address_input.setText(address);
-            postcode_input.setText(postcode);
-            city_input.setText(city);
-            notes_input.setText(notes);
+        // Retrieve data from Intent
+        Intent intent = getIntent();
+        if (intent.hasExtra("EVENT_ID")) {
+            int eventId = intent.getIntExtra("EVENT_ID", -1);
+            // Load event data from the database using the eventId
+            // and populate the UI fields with the event data
+            loadEventData(eventId);
         } else {
-            Toast.makeText(this, "No data.", Toast.LENGTH_SHORT).show();
+            // Handle the case where no EVENT_ID is provided
+            Toast.makeText(this, "Invalid event ID", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        // Set click listeners for date and time buttons
+        dateButton.setOnClickListener(v -> showDatePickerDialog());
+        timeButton.setOnClickListener(v -> showTimePickerDialog());
+
+        updateButton.setOnClickListener(v -> updateEvent());
+        deleteButton.setOnClickListener(v -> deleteEvent());
+    }
+
+    // Method to load event data from the database and populate UI fields
+    private void loadEventData(int eventId) {
+        // Retrieve event data from the database using LiveData
+        eventViewModel.getEventById(eventId).observe(this, event -> {
+            if (event != null) {
+                titleInput.setText(event.getTitle());
+                dateButton.setText(event.getDate());
+                timeButton.setText(event.getTime());
+                addressInput.setText(event.getAddress());
+                postcodeInput.setText(event.getPostcode());
+                cityInput.setText(event.getCity());
+                notesInput.setText(event.getNotes());
+            }
+        });
+    }
+
+    // Method to update the event in the database
+    private void updateEvent() {
+        if (TextUtils.isEmpty(titleInput.getText())) {
+            setResult(RESULT_CANCELED);
+        } else {
+            // Retrieve values from EditText fields
+            String title = titleInput.getText().toString();
+            String date = dateButton.getText().toString();
+            String time = timeButton.getText().toString();
+            String address = addressInput.getText().toString();
+            String postcode = postcodeInput.getText().toString();
+            String city = cityInput.getText().toString();
+            String notes = notesInput.getText().toString();
+
+            // Get the eventId from the Intent
+            int eventId = getIntent().getIntExtra("EVENT_ID", -1);
+
+            // Create an Event object with the updated values
+            Event updatedEvent = new Event(title, date, time, address, postcode, city, notes);
+            updatedEvent.setId(eventId); // Set the ID to ensure it's recognized as an existing event
+
+            // Call the update method in the ViewModel to update the event in the database
+            eventViewModel.update(updatedEvent);
+
+            // Provide feedback (optional)
+            Toast.makeText(this, "Event updated successfully", Toast.LENGTH_SHORT).show();
+
+            // Set result and finish the activity
+            setResult(RESULT_OK);
         }
     }
 
-    // A method to display a confirmation dialog before deleting the event
-    public void confirmMessage() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(" Delete " + title + " ? ");
-        builder.setMessage(" Are you sure you want to delete " + title + " ? ");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EventViewModel eventViewModel = new EventViewModel(UpdateEventActivity.this.getApplication());
-                eventViewModel.deleteEvent(id);
-                // Notify HomeFragment to refresh the data
-                ((HomeFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).storeDataInArrays();
-                // Finish the activity
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Cancel the delete process if the user chooses not to delete
-            }
-        });
-        builder.create().show();
-    }
+    // Method to delete the event from the database with a confirmation dialog
+    private void deleteEvent() {
+        // Get the eventId from the Intent
+        int eventId = getIntent().getIntExtra("EVENT_ID", -1);
 
+        // Show a confirmation dialog before deleting the event
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Event")
+                .setMessage("Are you sure you want to delete this event?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Call the delete method in the ViewModel to delete the event from the database
+                        eventViewModel.delete(eventId);
+                        // Provide feedback (optional)
+                        Toast.makeText(UpdateEventActivity.this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+                        // Set result and finish the activity
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null) // Do nothing if "No" is clicked
+                .show();
+    }
 
     // Method to show the DatePickerDialog
     private void showDatePickerDialog() {
@@ -170,8 +155,8 @@ public class UpdateEventActivity extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        // Update the date_button with the selected date
-                        date_button.setText(String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, day));
+                        // Update the date_input EditText with the selected date
+                        dateButton.setText(String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, day));
                     }
                 },
                 year, month, day);
@@ -191,11 +176,11 @@ public class UpdateEventActivity extends AppCompatActivity {
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                        // Update the time_button with the selected time
+                        // Update the time_input EditText with the selected time
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
-                        time_button.setText(simpleDateFormat.format(calendar.getTime()));
+                        timeButton.setText(simpleDateFormat.format(calendar.getTime()));
                     }
                 },
                 hour, minute, true);
@@ -203,4 +188,6 @@ public class UpdateEventActivity extends AppCompatActivity {
         // Show the TimePickerDialog
         timePickerDialog.show();
     }
+
+
 }

@@ -34,7 +34,6 @@
         android:hint="@string/hint_event_title"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColor="#2D2F31"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.116"
         app:layout_constraintStart_toStartOf="parent"
