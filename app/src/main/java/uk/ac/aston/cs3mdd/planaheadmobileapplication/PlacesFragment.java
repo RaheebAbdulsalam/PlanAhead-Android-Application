@@ -42,11 +42,10 @@ public class PlacesFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PlaceListAdapter mAdapter;
     private EditText searchLocationEditText;
-    private Button searchButton;
+    private Button searchButton, useCurrentLocationButton;
     private GetNearbyPlaces service;
     private Retrofit retrofit;
     private Spinner placeTypeSpinner;
-    private Button useCurrentLocationButton;
     private LocationViewModel locationViewModel;
 
     @Override
@@ -61,9 +60,9 @@ public class PlacesFragment extends Fragment {
         View view = binding.getRoot();
 
         // Initialize views
-        searchLocationEditText = view.findViewById(R.id.searchLocationEditText);
-        searchButton = view.findViewById(R.id.searchButton);
-        placeTypeSpinner = view.findViewById(R.id.placeTypeSpinner);
+        searchLocationEditText = binding.searchLocationEditText;
+        searchButton = binding.searchButton;
+        placeTypeSpinner = binding.placeTypeSpinner;
 
         // Set up the Spinner with the array of place types
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -86,7 +85,7 @@ public class PlacesFragment extends Fragment {
         });
 
         // The button to use the user current location
-        useCurrentLocationButton = view.findViewById(R.id.useCurrentLocationButton);
+        useCurrentLocationButton = binding.useCurrentLocationButton;
         useCurrentLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,8 +96,6 @@ public class PlacesFragment extends Fragment {
                 }
             }
         });
-
-
         // Create the Retrofit instance
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/")
@@ -162,10 +159,10 @@ public class PlacesFragment extends Fragment {
                 String addressFormatted = address.getAddressLine(0) + "\n" ;
                 binding.searchLocationEditText.setText(addressFormatted);
             } else {
-                Toast.makeText(getContext(), "No results found for the provided location", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.no_places_found, Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
-            Toast.makeText(getContext(), "Error performing search: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.search_error + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -191,17 +188,18 @@ public class PlacesFragment extends Fragment {
                     // Set the current address in the search bar
                     searchLocationEditText.setText(addressFormatted);
                 } else {
-                    Toast.makeText(getContext(), "Address not found for the current location", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.address_not_found_for_current_location, Toast.LENGTH_SHORT).show();
                 }
             } catch (IOException e) {
-                Toast.makeText(getContext(), "Error retrieving address: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.error_retrieving_address + e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(MainActivity.TAG, "Error getting address\n"+e.getMessage());
             }
         } else {
-            Toast.makeText(getContext(), "Current location not available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.current_location_not_available, Toast.LENGTH_SHORT).show();
         }
 
     }
+
 
     @Override
     public void onDestroyView() {

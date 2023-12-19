@@ -5,6 +5,8 @@ import android.util.Log;
 
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.MainActivity;
 
+
+// This class performs the API call using Retrofit.
 public class PlacesRepository {
     private GetNearbyPlaces nearbyPlacesService;
 

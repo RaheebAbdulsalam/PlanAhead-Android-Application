@@ -2,6 +2,8 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication.places;
 
 import androidx.annotation.NonNull;
 
+
+// This Model class represents the latitude and longitude of a location.
 public class MyLocation {
     private float lat;
     private float lng;

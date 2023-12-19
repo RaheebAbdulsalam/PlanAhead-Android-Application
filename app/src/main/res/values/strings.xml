@@ -1,13 +1,19 @@
 <resources>
 
-<!--    Navigation-->
-    <string name="app_name">My App</string>
+   <!--Navigation-->
+    <string name="app_name">Plan Ahead</string>
     <string name="title_home">Home</string>
     <string name="title_map">Map</string>
     <string name="title_weather">Weather</string>
     <string name="title_places">Places</string>
     <string name="title_addEvent">Add An Event</string>
     <string name="add">Add Button</string>
+
+    <!--Page titles in Action Bar-->
+    <string name="home">Home</string>
+    <string name="nearby_places">Nearby Places</string>
+    <string name="map_view">Map View</string>
+    <string name="weather_forecast">Weather Forecast</string>
 
     <!--    Events form (Add Event & Update Event)-->
     <string name="hint_event_title">E.g., Appointment, Interview, etc.</string>
@@ -26,6 +32,15 @@
     <string name="event_title">Event Title</string>
     <string name="event_date_and_time">Event Date and Time</string>
     <string name="event_notes">Additional Notes</string>
+    <string name="empty_not_saved">Event not saved because it is empty.</string>
+    <string name="event_added_successfully">Your Event has been added successfully</string>
+    <string name="event_updated_successfully">Event updated successfully</string>
+    <string name="id_not_valid">Invalid event ID</string>
+    <string name="delete_event">Delete Event</string>
+    <string name="confirm_deletion">Are you sure you want to delete this event?</string>
+    <string name="event_deleted_successfully">Event deleted successfully</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!--Map and Places-->
     <string name="map_description">Map view for displaying location information</string>
@@ -36,12 +51,20 @@
     <string name="place_icon">Place icon</string>
     <string name="search_events_by_title">Search for your special event</string>
     <string name="use_current_location">Use my Location</string>
+    <string name="no_places_found">No results found for the provided location</string>
+    <string name="search_error">Error performing search: </string>
+    <string name="address_not_found_for_current_location">Address not found for the current location</string>
+    <string name="error_retrieving_address">Error retrieving address:</string>
+    <string name="current_location_not_available">Current location not available</string>
 
-    <!-- Weather Layout -->
+    <!-- Weather -->
     <string name="check_weather">Check the Weather</string>
     <string name="event_weather_editText">Enter your event location</string>
     <string name="weather_icon">Weather Icon</string>
+    <string name="error_fetching_weather">Error fetching weather data. Please try again.</string>
+    <string name="coordinates_null">Coordinates are null for the given city name</string>
+    <string name="empty_city_name">Please enter an address.</string>
 
 
-    <string name="empty_not_saved">Word not saved because it is empty.</string>
+
 </resources>

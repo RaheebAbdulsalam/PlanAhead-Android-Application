@@ -40,25 +40,27 @@ import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentMapBind
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.MyPlace;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.PlacesViewModel;
 
-
 public class MapFragment extends Fragment implements OnMapReadyCallback {
-
     private FragmentMapBinding binding;
     private MapView mapView;
     private EditText mapSearch;
     private GoogleMap mGoogleMap;
-
     private ImageView searchIcon;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMapBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mapView = binding.mapView;
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         mapSearch = binding.inputSearch;
         searchIcon=binding.icMagnify;
-        return binding.getRoot();
+
     }
 
     @Override
@@ -70,12 +72,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             UiSettings uiSettings = mGoogleMap.getUiSettings();
             uiSettings.setZoomControlsEnabled(true);
 
-
             // Set the initial camera position to focus on the UK
             LatLng ukLatLng = new LatLng(52.4862, -1.8904); // Coordinates for Birmingham
             float zoomLevel = 8.0f; // Adjust the zoom level as needed
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ukLatLng, zoomLevel));
-
 
             searchAddress();
             // Add markers for all nearby places
@@ -86,14 +86,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     // Method to add markers for all nearby places from the ViewModel
     private void addMarkersForPlaces() {
         PlacesViewModel viewModel = new ViewModelProvider(requireActivity()).get(PlacesViewModel.class);
-
         viewModel.getAllPlaces().observe(getViewLifecycleOwner(), placeList -> {
             // Check if the list is not empty
             if (placeList != null && !placeList.isEmpty()) {
                 for (MyPlace place : placeList) {
                     LatLng placeLatLng = new LatLng(place.getLatitude(), place.getLongitude());
                     //Change the marker plot color
-                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
                     mGoogleMap.addMarker(new MarkerOptions().position(placeLatLng).title(place.getName()) .icon(bitmapDescriptor));
                 }
             }
@@ -104,7 +103,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void searchAddress() {
         // Set OnClickListener for the search icon
         searchIcon.setOnClickListener(v -> searchAndMoveToLocation());
-
         mapSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
                     (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
@@ -117,7 +115,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     //Performs geocoding based on the user-entered search query, moves the camera to the searched location, and adds a marker at that location on the Google Map.
     private void searchAndMoveToLocation() {
-        Log.d(TAG, "searchAndMoveToLocation: geolocation");
         String searchString = mapSearch.getText().toString();
         Geocoder geocoder = new Geocoder(requireContext());
         List<Address> list = new ArrayList<>();

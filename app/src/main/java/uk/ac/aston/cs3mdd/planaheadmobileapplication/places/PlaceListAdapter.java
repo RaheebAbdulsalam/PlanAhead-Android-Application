@@ -15,6 +15,7 @@ import java.util.List;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.R;
 
 
+// This class manages the RecyclerView for displaying a list of places.
 public class PlaceListAdapter extends
         RecyclerView.Adapter<PlaceListAdapter.PlaceViewHolder> {
 

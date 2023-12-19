@@ -42,11 +42,9 @@ public class UpdateEventActivity extends AppCompatActivity {
         postcodeInput = findViewById(R.id.postcode_input_update);
         cityInput = findViewById(R.id.city_input_update);
         notesInput = findViewById(R.id.notes_input_update);
-
         updateButton = findViewById(R.id.update_button);
         deleteButton = findViewById(R.id.delete_button);
 
-        // Initialize the ViewModel
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
         // Retrieve data from Intent
@@ -54,11 +52,10 @@ public class UpdateEventActivity extends AppCompatActivity {
         if (intent.hasExtra("EVENT_ID")) {
             int eventId = intent.getIntExtra("EVENT_ID", -1);
             // Load event data from the database using the eventId
-            // and populate the UI fields with the event data
             loadEventData(eventId);
         } else {
             // Handle the case where no EVENT_ID is provided
-            Toast.makeText(this, "Invalid event ID", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.id_not_valid, Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -110,8 +107,8 @@ public class UpdateEventActivity extends AppCompatActivity {
             // Call the update method in the ViewModel to update the event in the database
             eventViewModel.update(updatedEvent);
 
-            // Provide feedback (optional)
-            Toast.makeText(this, "Event updated successfully", Toast.LENGTH_SHORT).show();
+            // Provide feedback
+            Toast.makeText(this, R.string.event_updated_successfully, Toast.LENGTH_SHORT).show();
 
             // Set result and finish the activity
             setResult(RESULT_OK);
@@ -125,21 +122,21 @@ public class UpdateEventActivity extends AppCompatActivity {
 
         // Show a confirmation dialog before deleting the event
         new AlertDialog.Builder(this)
-                .setTitle("Delete Event")
-                .setMessage("Are you sure you want to delete this event?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.delete_event)
+                .setMessage(R.string.confirm_deletion)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Call the delete method in the ViewModel to delete the event from the database
                         eventViewModel.delete(eventId);
                         // Provide feedback (optional)
-                        Toast.makeText(UpdateEventActivity.this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateEventActivity.this, R.string.event_deleted_successfully, Toast.LENGTH_SHORT).show();
                         // Set result and finish the activity
                         setResult(RESULT_OK);
                         finish();
                     }
                 })
-                .setNegativeButton("No", null) // Do nothing if "No" is clicked
+                .setNegativeButton(R.string.no, null) // Do nothing if "No" is clicked
                 .show();
     }
 

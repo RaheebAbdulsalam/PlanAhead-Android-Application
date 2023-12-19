@@ -34,6 +34,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Objects;
+
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.ActivityMainBinding;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.places.SingletonData;
@@ -65,24 +67,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
 
-
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                // Update the action bar title based on the destination ID
-                int destinationId = destination.getId();
-                if (destinationId == R.id.navigation_home) {
-                    getSupportActionBar().setTitle("Home");
-                } else if (destinationId == R.id.navigation_map) {
-                    getSupportActionBar().setTitle("Map View");
-                } else if (destinationId == R.id.navigation_places) {
-                    getSupportActionBar().setTitle("Nearby Places");
-                } else if (destinationId == R.id.navigation_weather) {
-                    getSupportActionBar().setTitle("Weather Forecast");
-                }
+                updateActionBarTitle(destination.getId());
             }
         });
-
 
         // FloatingActionButton to add an Event
         add_button = findViewById(R.id.add);
@@ -95,104 +85,116 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Initialize the Places API keys
+        // Initialising Places API keys
+        getPlacesApiKeys();
+
+        // Getting the device location (GPS)
+        setUpLocationServices();
+
+    }
+
+    private void updateActionBarTitle(int destinationId) {
+        if (destinationId == R.id.navigation_home) {
+            Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.home);
+        } else if (destinationId == R.id.navigation_map) {
+            Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.map_view);
+        } else if (destinationId == R.id.navigation_places) {
+            Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.nearby_places);
+        } else if (destinationId == R.id.navigation_weather) {
+            Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.weather_forecast);
+        }
+    }
+
+
+    private void getPlacesApiKeys() {
         try {
             ApplicationInfo applicationInfo =
                     getApplication().getPackageManager()
                             .getApplicationInfo(getApplication().getPackageName(), PackageManager.GET_META_DATA);
             String apiKey = applicationInfo.metaData.getString("com.google.android.geo.API_KEY");
-            Log.i(TAG, "MAPS KEY is " + apiKey);
             SingletonData.getInstance().setApiKey(apiKey);
             String placesKey = applicationInfo.metaData.getString("PLACES.API_KEY");
             SingletonData.getInstance().setPlacesKey(placesKey);
-
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }
-//----------------------------------------------------------------------------------------------------------------//
-// Getting the device location (GPS)
+    }
+
+    //----------------// Following methods are used to get the device location (GPS) and to handle location permissions //----------------------//
+                          //Note: Code have been taken from week (3) lab//
+    private void setUpLocationServices() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         model = new ViewModelProvider(this).get(LocationViewModel.class);
-        //Adding location permission
+
+        // Check and request location permissions
+        if (checkLocationPermissions()) {
+            getLastLocation();
+        }
+
+        setUpLocationCallback();
+
+        // Observe location updates
+        model.getLocationUpdates().observe(this, needUpdates -> {
+            if (needUpdates) {
+                startLocationUpdates();
+            } else {
+                stopLocationUpdates();
+            }
+        });
+    }
+
+    //  A method to check location permissions
+    private boolean checkLocationPermissions() {
+        // Check if location permission are granted, if not, request it
         if (ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this,
                         android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            // Request location permissions using ActivityResultLauncher
-            ActivityResultLauncher<String[]> locationPermissionRequest =
-                    registerForActivityResult(new ActivityResultContracts
-                                    .RequestMultiplePermissions(), result -> {
-                                Boolean fineLocationGranted = result.getOrDefault(
-                                        android.Manifest.permission.ACCESS_FINE_LOCATION, false);
-                                Boolean coarseLocationGranted = result.getOrDefault(
-                                        android.Manifest.permission.ACCESS_COARSE_LOCATION, false);
-                                if (fineLocationGranted != null && fineLocationGranted) {
-                                    Log.i(TAG, "Precise location access granted.");
-                                    getLastLocation();
-                                } else if (coarseLocationGranted != null && coarseLocationGranted) {
-                                    Log.i(TAG, "Only approximate location access granted.");
-                                    getLastLocation();
-                                } else {
-                                    Log.i(TAG, "No location access granted.");
-                                }
-                            }
-                    );
-
-            // Launch the location permission request to check whether the app already has the permissions, and whether the app needs to show a permission dialog
-            locationPermissionRequest.launch(new String[]{
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-            });
+            requestLocationPermissions();
+            return false;
         } else {
-            // Location permissions already granted, get the last known location
-            Log.i(TAG, "Location permissions already granted.");
-            getLastLocation();
+            return true;
         }
-
-        // Set up location callback to handle location updates
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    Log.i(TAG, "Location Update: NO LOCATION");
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    // Update UI with location data
-                    Log.i(TAG, "Location Update: (" + location.getLatitude() +
-                            ", " + location.getLongitude() +
-                            ", @ " + location.getTime() + ")");
-                    model.setCurrentLocation(location);
-                }
-            }
-        };
-
-        //Observing the model.getLocationUpdates and responding to changes by calling the start and stop methods
-        model.getLocationUpdates().observe(this, needUpdates -> {
-            if (needUpdates) {
-                this.startLocationUpdates();
-            } else {
-                this.stopLocationUpdates();
-            }
-        });
-
     }
 
-    // Method to get the last location, used in multiple places where the last location is needed
-    public void getLastLocation() {
+    // A method to request location permissions
+    private void requestLocationPermissions() {
+        ActivityResultLauncher<String[]> locationPermissionRequest =
+                registerForActivityResult(new ActivityResultContracts
+                                .RequestMultiplePermissions(), result -> {
+                            Boolean fineLocationGranted = result.getOrDefault(
+                                    android.Manifest.permission.ACCESS_FINE_LOCATION, false);
+                            Boolean coarseLocationGranted = result.getOrDefault(
+                                    android.Manifest.permission.ACCESS_COARSE_LOCATION, false);
+                            if (fineLocationGranted != null && fineLocationGranted) {
+                                Log.i(TAG, "Precise location access granted.");
+                                getLastLocation();
+                            } else if (coarseLocationGranted != null && coarseLocationGranted) {
+                                Log.i(TAG, "Only approximate location access granted.");
+                                getLastLocation();
+                            } else {
+                                Log.i(TAG, "No location access granted.");
+                            }
+                        }
+                );
+
+        locationPermissionRequest.launch(new String[]{
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        });
+    }
+
+    // A method to get the last known location
+    private void getLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         fusedLocationClient.getCurrentLocation(PRIORITY_BALANCED_POWER_ACCURACY, null)
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-
                     @Override
                     public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
                         if (location != null) {
-                            // Logic to handle location object
                             Log.i(TAG, "We got a location: (" + location.getLatitude() +
                                     ", " + location.getLongitude() + ")");
                             model.setCurrentLocation(location);
@@ -203,25 +205,49 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    // start location updates
+    // A method for handling location updates
+    private void setUpLocationCallback() {
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                for (Location location : locationResult.getLocations()) {
+                    Log.i(TAG, "Location Update: (" + location.getLatitude() +
+                            ", " + location.getLongitude() +
+                            ", @ " + location.getTime() + ")");
+                    model.setCurrentLocation(location);
+                }
+            }
+        };
+    }
+
+    // A method to start location updates
     private void startLocationUpdates() {
         if (locationRequest == null) {
             createLocationRequest();
         }
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+        if (checkLocationPermissions()) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            fusedLocationClient.requestLocationUpdates(locationRequest,
+                    locationCallback,
+                    Looper.getMainLooper());
         }
-        fusedLocationClient.requestLocationUpdates(locationRequest,
-                locationCallback,
-                Looper.getMainLooper());
     }
 
-    //  A method to stop location updates
+    // A method to stop location updates
     private void stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
-    // A method to initialise the locationRequest
+    // A method to create Location Request
     protected void createLocationRequest() {
         locationRequest = new LocationRequest.Builder(10000)
                 .setMinUpdateIntervalMillis(5000)
@@ -229,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
     }
 
-    // A method to check if the location updates were previously requested
+    // A method to resume location updates if needed
     @Override
     protected void onResume() {
         super.onResume();
@@ -238,14 +264,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // A method to turn the location updates off while the app is not in the foreground
+    // A method to pause location updates when the app is in the background
     @Override
     protected void onPause() {
         super.onPause();
         stopLocationUpdates();
     }
-
-
-
 
 }

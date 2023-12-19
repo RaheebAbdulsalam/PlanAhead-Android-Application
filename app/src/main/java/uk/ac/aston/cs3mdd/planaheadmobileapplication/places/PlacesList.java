@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+
+//This class represents a list of MyPlace objects along with a status.
 public class PlacesList {
     private ArrayList<MyPlace> results;
     private String status;

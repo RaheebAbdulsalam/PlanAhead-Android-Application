@@ -42,7 +42,6 @@ public class WeatherFragment extends Fragment {
     private ImageView weatherIconImageView;
 
 
-
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -66,10 +65,8 @@ public class WeatherFragment extends Fragment {
         weatherIconImageView = binding.weatherIconImageView;
         searchEditText = binding.searchEditText;
         searchButton = binding.searchButton;
-
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
-        String apiKey = getApiKey(requireContext());
         searchButton.setOnClickListener(v -> {
             String cityName = searchEditText.getText().toString();
             if (!cityName.isEmpty()) {
@@ -77,61 +74,52 @@ public class WeatherFragment extends Fragment {
                 if (coordinates != null) {
                     double latitude = coordinates[0];
                     double longitude = coordinates[1];
-
-                    weatherViewModel.getCurrentWeather(latitude, longitude, apiKey).observe(getViewLifecycleOwner(), weatherResponse -> {
-                        if (weatherResponse != null) {
-                            cityNameTextView.setText(weatherResponse.name);
-                            temperatureTextView.setText(String.format(Locale.getDefault(), "%.2f °C", weatherResponse.main.temp - 273.15));
-                            descriptionTextView.setText(weatherResponse.weather.get(0).description);
-                            windTextView.setText(String.format(Locale.getDefault(), "Wind: %.2f m/s, %d°", weatherResponse.wind.speed, weatherResponse.wind.deg));
-                            // Display additional data
-                            long sunriseTimestamp = weatherResponse.sys.sunrise * 1000L;
-                            long sunsetTimestamp = weatherResponse.sys.sunset * 1000L;
-                            String sunriseTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(sunriseTimestamp));
-                            String sunsetTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(sunsetTimestamp));
-                            sunriseTextView.setText("Sunrise: " + sunriseTime);
-                            sunsetTextView.setText("Sunset: " + sunsetTime);
-
-                            // Display current time in the city
-                            double timezoneOffset = weatherResponse.timezone / 3600.0; // Convert seconds to hours
-                            long utcTimestamp = System.currentTimeMillis() / 1000L; // UTC timestamp in seconds
-                            long localTimestamp = utcTimestamp + (long) (timezoneOffset * 3600); // Convert to local time
-                            String localTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                                    .format(new Date(localTimestamp * 1000L));
-                            dateTimeTextView.setText(localTime);
-
-                            //Display the weather icon
-                            String iconUrl = "https://openweathermap.org/img/w/" + weatherResponse.weather.get(0).icon + ".png";
-                            Picasso.get().load(iconUrl).into(weatherIconImageView);
-                        } else {
-                            // Handle null response or error
-                            Toast.makeText(requireContext(), "Error fetching weather data. Please try again.", Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "Weather data response is null or an error occurred");
-                        }
-                    });
+                    fetchWeather(latitude, longitude);
                 } else {
                     // Handle case where coordinates couldn't be retrieved for the given address
-                    Toast.makeText(requireContext(), "Could not retrieve coordinates for the given address.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), R.string.coordinates_null, Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Coordinates are null for the given city name");
                 }
             } else {
                 // Handle case where the address name is empty
-                Toast.makeText(requireContext(), "Please enter an address.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.empty_city_name, Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "City name is empty");
             }
-
         });
     }
 
-    private String getApiKey(Context context) {
-        try {
-            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            Bundle bundle = applicationInfo.metaData;
-            return bundle.getString("WEATHER.API_KEY");
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+
+    private void fetchWeather(double latitude, double longitude) {
+        String apiKey = getApiKey(requireContext());
+        weatherViewModel.getCurrentWeather(latitude, longitude, apiKey).observe(getViewLifecycleOwner(), weatherResponse -> {
+            if (weatherResponse != null) {
+                cityNameTextView.setText(weatherResponse.name);
+                temperatureTextView.setText(String.format(Locale.getDefault(), "%.2f °C", weatherResponse.main.temp - 273.15));
+                descriptionTextView.setText(weatherResponse.weather.get(0).description);
+                windTextView.setText(String.format(Locale.getDefault(), "Wind: %.2f m/s, %d°", weatherResponse.wind.speed, weatherResponse.wind.deg));
+                // Display additional data
+                long sunriseTimestamp = weatherResponse.sys.sunrise * 1000L;
+                long sunsetTimestamp = weatherResponse.sys.sunset * 1000L;
+                String sunriseTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(sunriseTimestamp));
+                String sunsetTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(sunsetTimestamp));
+                sunriseTextView.setText("Sunrise: " + sunriseTime);
+                sunsetTextView.setText("Sunset: " + sunsetTime);
+                // Display current time in the city
+                double timezoneOffset = weatherResponse.timezone / 3600.0; // Convert seconds to hours
+                long utcTimestamp = System.currentTimeMillis() / 1000L; // UTC timestamp in seconds
+                long localTimestamp = utcTimestamp + (long) (timezoneOffset * 3600); // Convert to local time
+                String localTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                        .format(new Date(localTimestamp * 1000L));
+                dateTimeTextView.setText(localTime);
+                //Display the weather icon
+                String iconUrl = "https://openweathermap.org/img/w/" + weatherResponse.weather.get(0).icon + ".png";
+                Picasso.get().load(iconUrl).into(weatherIconImageView);
+            } else {
+                // Handle null response or error
+                Toast.makeText(requireContext(), R.string.error_fetching_weather, Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Weather data response is null or an error occurred");
+            }
+        });
     }
 
     private double[] getCoordinatesFromCityName(String cityName) {
@@ -149,7 +137,15 @@ public class WeatherFragment extends Fragment {
         return null;
     }
 
-
+    private String getApiKey(Context context) {
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = applicationInfo.metaData;
+            return bundle.getString("WEATHER.API_KEY");
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     @Override

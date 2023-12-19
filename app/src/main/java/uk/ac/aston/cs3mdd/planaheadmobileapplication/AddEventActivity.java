@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -66,6 +68,8 @@ public class AddEventActivity extends AppCompatActivity {
 
             // Insert the event into the database using the repository
             eventViewModel.insert(event);
+
+            Toast.makeText(this, R.string.event_added_successfully, Toast.LENGTH_SHORT).show();
 
             // Set the result to RESULT_OK
             setResult(RESULT_OK);

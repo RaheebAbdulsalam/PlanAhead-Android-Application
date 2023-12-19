@@ -2,6 +2,8 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication.places;
 
 import android.content.Context;
 
+
+// A singleton class that holds shared data such as API keys
 public class SingletonData {
     private static SingletonData _INSTANCE;
     private Context context;

@@ -2,6 +2,7 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication.places;
 
 import androidx.annotation.NonNull;
 
+//This class represents a place with attributes like name, icon, place_id, rating, and geometry.
 public class MyPlace {
     private String name;
     private String icon;

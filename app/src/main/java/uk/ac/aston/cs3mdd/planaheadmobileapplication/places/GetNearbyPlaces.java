@@ -4,6 +4,8 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+
+//Retrofit interface for defining the API endpoint and parameters for fetching nearby places.
 public interface GetNearbyPlaces {
 
 
@@ -15,4 +17,6 @@ public interface GetNearbyPlaces {
                                                @Query("type") String type,
                                                @Query("fields") String fields,
                                                @Query("key") String apikey);
+
+
 }

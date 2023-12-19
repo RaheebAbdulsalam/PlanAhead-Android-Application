@@ -21,4 +21,5 @@ public class WeatherRepository {
     public Call<WeatherResponse> getCurrentWeather(double latitude, double longitude, String apiKey) {
         return weatherService.getCurrentWeather(latitude, longitude, apiKey);
     }
+
 }
