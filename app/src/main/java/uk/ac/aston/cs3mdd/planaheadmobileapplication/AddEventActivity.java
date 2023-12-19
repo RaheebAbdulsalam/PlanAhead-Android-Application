@@ -3,7 +3,6 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -51,9 +50,19 @@ public class AddEventActivity extends AppCompatActivity {
 
     private void saveEvent() {
         // Check if the title is empty; if yes, do not save
-        if (TextUtils.isEmpty(title_input.getText())) {
-            setResult(RESULT_CANCELED);
-        } else {
+        String eventTitle=title_input.getText().toString();
+        String eventPostcode = postcode_input.getText().toString();
+
+        if (eventTitle.isEmpty()) {
+            title_input.setError("Event's Title is required");
+            return;
+        }
+        if (!isValidUKPostcode(eventPostcode)) {
+            postcode_input.setError("Enter a valid postcode");
+            return;
+        }
+
+
             // Retrieve values from EditText fields
             String title = title_input.getText().toString();
             String date = date_button.getText().toString();
@@ -73,7 +82,6 @@ public class AddEventActivity extends AppCompatActivity {
 
             // Set the result to RESULT_OK
             setResult(RESULT_OK);
-        }
 
         // Finish the activity
         finish();
@@ -125,4 +133,12 @@ public class AddEventActivity extends AppCompatActivity {
         // Show the TimePickerDialog
         timePickerDialog.show();
     }
+
+
+    // Method to validate UK postcode format using a regular expression
+    private boolean isValidUKPostcode(String postcode) {
+        String ukPostcodeRegex = "(?i)^([A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}|[A-Z]{1,2}[0-9R][0-9A-Z]?)$";
+        return postcode.matches(ukPostcodeRegex);
+    }
+
 }

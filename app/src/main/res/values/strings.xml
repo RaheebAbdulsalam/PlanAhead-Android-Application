@@ -1,7 +1,7 @@
 <resources>
 
-   <!--Navigation-->
-    <string name="app_name">Plan Ahead</string>
+    <!--Navigation-->
+    <string name="app_name">PerfectDay Planner</string>
     <string name="title_home">Home</string>
     <string name="title_map">Map</string>
     <string name="title_weather">Weather</string>
@@ -64,7 +64,6 @@
     <string name="error_fetching_weather">Error fetching weather data. Please try again.</string>
     <string name="coordinates_null">Coordinates are null for the given city name</string>
     <string name="empty_city_name">Please enter an address.</string>
-
 
 
 </resources>
