@@ -71,7 +71,7 @@ public class EventAdapter extends ListAdapter<Event, EventAdapter.EventViewHolde
             event_time_txt.setText("Time: " + event.getTime());
             event_address_txt.setText("Address: " + event.getAddress());
             event_postcode_txt.setText(event.getPostcode());
-            event_city_txt.setText(event.getCity());
+            event_city_txt.setText(event.getCity()+ ", ");
             event_notes_txt.setText("Note: " +event.getNotes());
         }
 

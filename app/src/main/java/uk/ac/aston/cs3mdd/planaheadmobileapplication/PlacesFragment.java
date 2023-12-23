@@ -42,7 +42,7 @@ public class PlacesFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PlaceListAdapter mAdapter;
     private EditText searchLocationEditText;
-    private Button searchButton, useCurrentLocationButton;
+    private Button searchButton, useCurrentLocationButton,clearButton;
     private GetNearbyPlaces service;
     private Retrofit retrofit;
     private Spinner placeTypeSpinner;
@@ -62,6 +62,7 @@ public class PlacesFragment extends Fragment {
         // Initialize views
         searchLocationEditText = binding.searchLocationEditText;
         searchButton = binding.searchButton;
+        clearButton=binding.clearButton;
         placeTypeSpinner = binding.placeTypeSpinner;
 
         // Set up the Spinner with the array of place types
@@ -73,27 +74,28 @@ public class PlacesFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         placeTypeSpinner.setAdapter(adapter);
 
+
+        //clear search bar
+        clearButton.setOnClickListener(v -> {
+            // Clear the search bar
+            searchLocationEditText.getText().clear();
+        });
+
         // Set onClickListener for the search button
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the user's input
-                String location = searchLocationEditText.getText().toString();
-                // Perform the search
-                performSearch(location);
-            }
+        searchButton.setOnClickListener(v -> {
+            // Get the user's input
+            String location = searchLocationEditText.getText().toString();
+            // Perform the search
+            performSearch(location);
         });
 
         // The button to use the user current location
         useCurrentLocationButton = binding.useCurrentLocationButton;
-        useCurrentLocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    useCurrentLocation();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        useCurrentLocationButton.setOnClickListener(v -> {
+            try {
+                useCurrentLocation();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
         // Create the Retrofit instance
@@ -198,6 +200,13 @@ public class PlacesFragment extends Fragment {
             Toast.makeText(getContext(), R.string.current_location_not_available, Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Check if the current location is available and update the search bar
+        locationViewModel.setSearchBarWithCurrentLocation(requireContext(), searchLocationEditText);
     }
 
 

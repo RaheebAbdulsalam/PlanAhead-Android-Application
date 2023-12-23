@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //----------------// Following methods are used to get the device location (GPS) and to handle location permissions //----------------------//
-                          //Note: Code have been taken from week (3) lab//
+                          //Note: Most Code have been taken from week(3) lab//
     private void setUpLocationServices() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         model = new ViewModelProvider(this).get(LocationViewModel.class);

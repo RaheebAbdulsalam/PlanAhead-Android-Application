@@ -58,10 +58,11 @@ public class UpdateEventActivity extends AppCompatActivity {
             finish();
         }
 
-        // Set click listeners for date and time buttons
+        // Setting click listeners for date and time buttons
         dateButton.setOnClickListener(v -> showDatePickerDialog());
         timeButton.setOnClickListener(v -> showTimePickerDialog());
 
+        // Setting click listeners for update and delete buttons
         updateButton.setOnClickListener(v -> updateEvent());
         deleteButton.setOnClickListener(v -> deleteEvent());
     }

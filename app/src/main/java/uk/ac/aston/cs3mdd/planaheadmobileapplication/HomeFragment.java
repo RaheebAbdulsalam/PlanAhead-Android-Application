@@ -48,6 +48,15 @@ public class HomeFragment extends Fragment implements EventAdapter.EventClickCal
 
         // Observe LiveData and update RecyclerView
         eventViewModel.getAllEvents().observe(getViewLifecycleOwner(), events -> {
+            //Check if there are no events saved
+            if (events != null && events.isEmpty()) {
+                // show the empty message
+                binding.textViewEmpty.setVisibility(View.VISIBLE);
+            } else {
+                // There are events, hide the empty message
+                binding.textViewEmpty.setVisibility(View.INVISIBLE);
+            }
+
             // Update the UI with the new list of events
             eventAdapter.submitList(events);
         });

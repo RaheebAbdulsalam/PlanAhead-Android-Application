@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentWeatherBinding;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.weather.WeatherViewModel;
 
 public class WeatherFragment extends Fragment {
@@ -38,8 +40,10 @@ public class WeatherFragment extends Fragment {
     private WeatherViewModel weatherViewModel;
     private TextView cityNameTextView, temperatureTextView, descriptionTextView, dateTimeTextView, windTextView, sunriseTextView, sunsetTextView;
     private EditText searchEditText;
-    private Button searchButton;
+    private Button searchButton,clearButton;
     private ImageView weatherIconImageView;
+
+    private LocationViewModel locationViewModel;
 
 
     @Override
@@ -65,8 +69,23 @@ public class WeatherFragment extends Fragment {
         weatherIconImageView = binding.weatherIconImageView;
         searchEditText = binding.searchEditText;
         searchButton = binding.searchButton;
+        clearButton=binding.clearButton;
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+        locationViewModel= new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
 
+        // Check if the current location is available and fetch weather automatically
+        Location currentLocation = locationViewModel.getCurrentLocation().getValue();
+        if (currentLocation != null) {
+            fetchWeather(currentLocation.getLatitude(), currentLocation.getLongitude());
+        }
+
+        //clear search bar
+        clearButton.setOnClickListener(v -> {
+            // Clear the search bar
+            searchEditText.getText().clear();
+        });
+
+        //Search bar
         searchButton.setOnClickListener(v -> {
             String cityName = searchEditText.getText().toString();
             if (!cityName.isEmpty()) {
@@ -86,6 +105,10 @@ public class WeatherFragment extends Fragment {
                 Log.e(TAG, "City name is empty");
             }
         });
+
+
+
+
     }
 
 
@@ -147,6 +170,12 @@ public class WeatherFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Check if the current location is available and update the search bar
+        locationViewModel.setSearchBarWithCurrentLocation(requireContext(), searchEditText);
+    }
 
     @Override
     public void onDestroyView() {

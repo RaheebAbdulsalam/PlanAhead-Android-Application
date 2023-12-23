@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,19 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".PlacesFragment">
 
-    <!-- Search Location EditText -->
-    <EditText
-        android:id="@+id/searchLocationEditText"
-        android:layout_width="362dp"
-        android:layout_height="53dp"
+    <!-- Search Location EditText and Clear Button with Margins -->
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:autofillHints="Location"
-        android:hint="@string/enter_location"
-        android:inputType="textPostalAddress"
-        android:minHeight="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/searchLocationEditText"
+            android:layout_width="0dp"
+            android:layout_height="53dp"
+            android:layout_weight="1"
+            android:autofillHints="Location"
+            android:hint="@string/enter_location"
+            android:inputType="textPostalAddress"
+            android:minHeight="48dp" />
+
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:text="@string/clear_search"
+            android:textColor="@color/white" />
+    </LinearLayout>
 
     <!-- Use Current Location Button -->
     <Button
@@ -30,10 +48,9 @@
         android:text="@string/use_current_location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchLocationEditText" />
+        app:layout_constraintTop_toBottomOf="@id/searchLayout" />
 
     <!-- Place Type Spinner -->
-
     <ImageView
         android:layout_width="43dp"
         android:layout_height="28dp"
@@ -57,7 +74,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/useCurrentLocationButton" />
-
 
     <!-- Search Button -->
 
@@ -84,7 +100,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/placeTypeSpinner"
         tools:ignore="TextSizeCheck" />
-
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView

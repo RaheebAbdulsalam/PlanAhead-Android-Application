@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="598dp"
@@ -16,32 +15,47 @@
         android:paddingEnd="16dp"
         tools:ignore="UselessParent">
 
-
+        <!-- Search and Clear Buttons -->
         <LinearLayout
             android:id="@+id/searchLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
-            <EditText
-                android:id="@+id/searchEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="Address"
-                android:hint="@string/event_weather_editText"
-                android:inputType="textPostalAddress"
-                android:minHeight="48dp"
-                tools:ignore="VisualLintTextFieldSize" />
+                <EditText
+                    android:id="@+id/searchEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints="Address"
+                    android:hint="@string/event_weather_editText"
+                    android:inputType="textPostalAddress"
+                    android:minHeight="48dp"
+                    tools:ignore="NestedWeights,VisualLintTextFieldSize" />
 
-            <Button
-                android:id="@+id/searchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="@string/check_weather" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/clearButton"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/white"
+                    android:text="@string/clear_search" />
+            </LinearLayout>
+
+
+        <!-- Search Button -->
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:text="@string/check_weather"
+            tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
 
         <LinearLayout
             android:id="@+id/weatherInfoLayout"

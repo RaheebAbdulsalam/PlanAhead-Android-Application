@@ -62,7 +62,6 @@ public class AddEventActivity extends AppCompatActivity {
             return;
         }
 
-
             // Retrieve values from EditText fields
             String title = title_input.getText().toString();
             String date = date_button.getText().toString();

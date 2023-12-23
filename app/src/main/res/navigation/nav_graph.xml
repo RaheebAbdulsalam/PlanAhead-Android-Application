@@ -9,7 +9,14 @@
         android:id="@+id/navigation_home"
         android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.HomeFragment"
         android:title="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_addEventActivity"
+            app:destination="@id/addEventActivity" />
+        <action
+            android:id="@+id/action_navigation_home_to_updateEventActivity"
+            app:destination="@id/updateEventActivity" />
+    </fragment>
 
 
     <action
@@ -20,19 +27,42 @@
         android:id="@+id/navigation_places"
         android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.PlacesFragment"
         android:title="@string/title_places"
-        tools:layout="@layout/fragment_places" />
+        tools:layout="@layout/fragment_places" >
+        <action
+            android:id="@+id/action_navigation_places_to_addEventActivity"
+            app:destination="@id/addEventActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_map"
         android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.MapFragment"
         android:title="@string/title_map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_navigation_map_to_addEventActivity"
+            app:destination="@id/addEventActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_weather"
         android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.WeatherFragment"
         android:title="@string/title_weather"
-        tools:layout="@layout/fragment_weather" />
+        tools:layout="@layout/fragment_weather" >
+        <action
+            android:id="@+id/action_navigation_weather_to_addEventActivity"
+            app:destination="@id/addEventActivity" />
+    </fragment>
+
+    <activity
+        android:id="@+id/addEventActivity"
+        android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.AddEventActivity"
+        android:label="activity_add_event"
+        tools:layout="@layout/activity_add_event" />
+    <activity
+        android:id="@+id/updateEventActivity"
+        android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.UpdateEventActivity"
+        android:label="activity_update_event"
+        tools:layout="@layout/activity_update_event" />
 
 
 </navigation>

@@ -15,6 +15,9 @@
     <string name="map_view">Map View</string>
     <string name="weather_forecast">Weather Forecast</string>
 
+    <string name="welcome_message">Welcome to PerfectDay Planner👋🏻 ! Explore your saved events below</string>
+
+
     <!--    Events form (Add Event & Update Event)-->
     <string name="hint_event_title">E.g., Appointment, Interview, etc.</string>
     <string name="hint_event_date">Event Date</string>
@@ -41,6 +44,9 @@
     <string name="event_deleted_successfully">Event deleted successfully</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="no_events_message">No events saved. Click the "+" button to add an event.</string>
+
+
 
     <!--Map and Places-->
     <string name="map_description">Map view for displaying location information</string>
@@ -50,7 +56,7 @@
     <string name="search_map">Search</string>
     <string name="place_icon">Place icon</string>
     <string name="search_events_by_title">Search for your special event</string>
-    <string name="use_current_location">Use my Location</string>
+    <string name="use_current_location"> Use my Location</string>
     <string name="no_places_found">No results found for the provided location</string>
     <string name="search_error">Error performing search: </string>
     <string name="address_not_found_for_current_location">Address not found for the current location</string>
@@ -66,4 +72,5 @@
     <string name="empty_city_name">Please enter an address.</string>
 
 
+    <string name="clear_search">X</string>
 </resources>
