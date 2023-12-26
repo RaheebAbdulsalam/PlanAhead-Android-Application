@@ -7,7 +7,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -74,6 +77,37 @@ public class HomeFragment extends Fragment implements EventAdapter.EventClickCal
             }
             @Override
             public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        // Sorting options
+        Spinner sortSpinner = binding.sortSpinner;
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.sort_options,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(adapter);
+
+        // Set a listener for item selections
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                // Handle sorting based on the selected option
+                if (position == 0) { // Sort by date (ascending)
+                    eventViewModel.getAllEventsByDate().observe(getViewLifecycleOwner(), events -> {
+                        eventAdapter.submitList(events);
+                    });
+                } else if (position == 1) { // Sort by date (descending)
+                    eventViewModel.getAllEventsByDateDescending().observe(getViewLifecycleOwner(), events -> {
+                        eventAdapter.submitList(events);
+                    });
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
 

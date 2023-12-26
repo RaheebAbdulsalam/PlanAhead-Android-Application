@@ -48,21 +48,10 @@
         android:text="@string/use_current_location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:drawableLeft="@drawable/ic_location"
         app:layout_constraintTop_toBottomOf="@id/searchLayout" />
 
     <!-- Place Type Spinner -->
-    <ImageView
-        android:layout_width="43dp"
-        android:layout_height="28dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="84dp"
-        android:contentDescription="@string/search_map"
-        android:src="@drawable/ic_location"
-        app:layout_constraintEnd_toStartOf="@+id/useCurrentLocationButton"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Spinner
         android:id="@+id/placeTypeSpinner"
         android:layout_width="308dp"
@@ -74,8 +63,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/useCurrentLocationButton" />
-
-    <!-- Search Button -->
 
     <!-- Drop down list icon-->
     <ImageView
@@ -90,12 +77,14 @@
         app:layout_constraintStart_toStartOf="@+id/placeTypeSpinner"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Search Button -->
     <Button
         android:id="@+id/searchButton"
-        android:layout_width="240dp"
+        android:layout_width="260dp"
         android:layout_height="51dp"
         android:layout_marginTop="8dp"
         android:text="@string/search"
+        android:drawableLeft="@drawable/ic_search_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/placeTypeSpinner"

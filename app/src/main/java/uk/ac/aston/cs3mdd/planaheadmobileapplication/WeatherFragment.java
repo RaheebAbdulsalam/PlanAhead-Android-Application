@@ -22,6 +22,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
@@ -33,18 +35,20 @@ import java.util.Locale;
 
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.databinding.FragmentWeatherBinding;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.model.LocationViewModel;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.weather.ForecastAdapter;
+import uk.ac.aston.cs3mdd.planaheadmobileapplication.weather.WeatherResponse;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.weather.WeatherViewModel;
 
 public class WeatherFragment extends Fragment {
     private FragmentWeatherBinding binding;
     private WeatherViewModel weatherViewModel;
-    private TextView cityNameTextView, temperatureTextView, descriptionTextView, dateTimeTextView, windTextView, sunriseTextView, sunsetTextView;
+    private TextView cityNameTextView, temperatureTextView, descriptionTextView, dateTimeTextView;
     private EditText searchEditText;
-    private Button searchButton,clearButton;
+    private Button searchButton, clearButton, useCurrentLocationButton;
     private ImageView weatherIconImageView;
-
     private LocationViewModel locationViewModel;
-
+    private RecyclerView forecastRecyclerView;
+    private ForecastAdapter forecastAdapter;
 
     @Override
     public View onCreateView(
@@ -55,7 +59,6 @@ public class WeatherFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -63,15 +66,20 @@ public class WeatherFragment extends Fragment {
         temperatureTextView = binding.temperatureTextView;
         descriptionTextView = binding.descriptionTextView;
         dateTimeTextView = binding.dateTimeTextView;
-        windTextView = binding.windTextView;
-        sunriseTextView = binding.sunriseTextView;
-        sunsetTextView = binding.sunsetTextView;
         weatherIconImageView = binding.weatherIconImageView;
         searchEditText = binding.searchEditText;
         searchButton = binding.searchButton;
-        clearButton=binding.clearButton;
+        clearButton = binding.clearButton;
+        forecastRecyclerView = binding.forecastRecyclerView;
+
+        //ViewModels
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
-        locationViewModel= new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
+        locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
+
+        // RecyclerView for forecast data
+        forecastAdapter = new ForecastAdapter();
+        forecastRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        forecastRecyclerView.setAdapter(forecastAdapter);
 
         // Check if the current location is available and fetch weather automatically
         Location currentLocation = locationViewModel.getCurrentLocation().getValue();
@@ -79,13 +87,20 @@ public class WeatherFragment extends Fragment {
             fetchWeather(currentLocation.getLatitude(), currentLocation.getLongitude());
         }
 
-        //clear search bar
-        clearButton.setOnClickListener(v -> {
-            // Clear the search bar
-            searchEditText.getText().clear();
+        // Clear search bar
+        clearButton.setOnClickListener(v -> searchEditText.getText().clear());
+
+        // The button to use the user current location
+        useCurrentLocationButton = binding.useCurrentLocationButton;
+        useCurrentLocationButton.setOnClickListener(v -> {
+            try {
+                useCurrentLocation();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
-        //Search bar
+        // Search bar
         searchButton.setOnClickListener(v -> {
             String cityName = searchEditText.getText().toString();
             if (!cityName.isEmpty()) {
@@ -95,56 +110,69 @@ public class WeatherFragment extends Fragment {
                     double longitude = coordinates[1];
                     fetchWeather(latitude, longitude);
                 } else {
-                    // Handle case where coordinates couldn't be retrieved for the given address
                     Toast.makeText(requireContext(), R.string.coordinates_null, Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Coordinates are null for the given city name");
                 }
             } else {
-                // Handle case where the address name is empty
                 Toast.makeText(requireContext(), R.string.empty_city_name, Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "City name is empty");
+                Log.e(TAG, "location name is empty");
             }
         });
-
-
-
-
     }
 
-
+    //Method to fetch weather data
     private void fetchWeather(double latitude, double longitude) {
         String apiKey = getApiKey(requireContext());
         weatherViewModel.getCurrentWeather(latitude, longitude, apiKey).observe(getViewLifecycleOwner(), weatherResponse -> {
             if (weatherResponse != null) {
-                cityNameTextView.setText(weatherResponse.name);
-                temperatureTextView.setText(String.format(Locale.getDefault(), "%.2f °C", weatherResponse.main.temp - 273.15));
-                descriptionTextView.setText(weatherResponse.weather.get(0).description);
-                windTextView.setText(String.format(Locale.getDefault(), "Wind: %.2f m/s, %d°", weatherResponse.wind.speed, weatherResponse.wind.deg));
-                // Display additional data
-                long sunriseTimestamp = weatherResponse.sys.sunrise * 1000L;
-                long sunsetTimestamp = weatherResponse.sys.sunset * 1000L;
-                String sunriseTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(sunriseTimestamp));
-                String sunsetTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(sunsetTimestamp));
-                sunriseTextView.setText("Sunrise: " + sunriseTime);
-                sunsetTextView.setText("Sunset: " + sunsetTime);
-                // Display current time in the city
-                double timezoneOffset = weatherResponse.timezone / 3600.0; // Convert seconds to hours
-                long utcTimestamp = System.currentTimeMillis() / 1000L; // UTC timestamp in seconds
-                long localTimestamp = utcTimestamp + (long) (timezoneOffset * 3600); // Convert to local time
-                String localTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                        .format(new Date(localTimestamp * 1000L));
-                dateTimeTextView.setText(localTime);
-                //Display the weather icon
-                String iconUrl = "https://openweathermap.org/img/w/" + weatherResponse.weather.get(0).icon + ".png";
-                Picasso.get().load(iconUrl).into(weatherIconImageView);
+                // Display current weather data
+               displayCurrentWeatherData(weatherResponse);
+
+                // Fetch and display weather forecast
+                weatherViewModel.getWeatherForecast(latitude, longitude, apiKey).observe(getViewLifecycleOwner(), forecast -> {
+                    if (forecast != null && forecast.getList() != null) {
+                        displayForecastData(forecast.getList());
+                    } else {
+                        Log.e(TAG, "Forecast data response is null");
+                    }
+                });
             } else {
-                // Handle null response or error
                 Toast.makeText(requireContext(), R.string.error_fetching_weather, Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "Weather data response is null or an error occurred");
             }
         });
     }
 
+    // Display current weather data
+    private void displayCurrentWeatherData(WeatherResponse weatherResponse) {
+        cityNameTextView.setText(weatherResponse.name);
+        temperatureTextView.setText(String.format(Locale.getDefault(), "%.0f °C", weatherResponse.main.temp - 273.15));
+        descriptionTextView.setText(weatherResponse.weather.get(0).description);
+
+        // Convert timestamp to local time
+        double timezoneOffset = weatherResponse.timezone / 3600.0;
+        long utcTimestamp = System.currentTimeMillis() / 1000L;
+        long localTimestamp = utcTimestamp + (long) (timezoneOffset * 3600);
+        String localTime = new SimpleDateFormat("EEEE, MMMM dd, yyyy HH:mm:ss", Locale.getDefault())
+                .format(new Date(localTimestamp * 1000L));
+        dateTimeTextView.setText(localTime);
+
+        // Load weather icon using Picasso library
+        String iconUrl = "https://openweathermap.org/img/w/" + weatherResponse.weather.get(0).icon + ".png";
+        Picasso.get().load(iconUrl).into(weatherIconImageView);
+
+        // Display min and max temperatures
+        TextView tempMinTextView = binding.getRoot().findViewById(R.id.tempMinTextView);
+        TextView tempMaxTextView = binding.getRoot().findViewById(R.id.tempMaxTextView);
+        tempMinTextView.setText(String.format(Locale.getDefault(), "L: %.0f °C", weatherResponse.main.temp_min - 273.15));
+        tempMaxTextView.setText(String.format(Locale.getDefault(), "H: %.0f °C", weatherResponse.main.temp_max - 273.15));
+    }
+
+    // Display weather forecast data
+    private void displayForecastData(List<WeatherResponse> forecastData) {
+        forecastAdapter.setForecastData(forecastData);
+    }
+
+    // Get latitude and longitude from a city name using Geocoder
     private double[] getCoordinatesFromCityName(String cityName) {
         Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
         try {
@@ -160,6 +188,7 @@ public class WeatherFragment extends Fragment {
         return null;
     }
 
+    // Get OpenWeatherMap API key from the app's metadata
     private String getApiKey(Context context) {
         try {
             ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
@@ -170,10 +199,14 @@ public class WeatherFragment extends Fragment {
         }
     }
 
+    private void useCurrentLocation() {
+        locationViewModel.useCurrentLocation(searchEditText, requireContext());
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        // Check if the current location is available and update the search bar
+        // Set the search bar text to the current location
         locationViewModel.setSearchBarWithCurrentLocation(requireContext(), searchEditText);
     }
 
@@ -183,4 +216,5 @@ public class WeatherFragment extends Fragment {
         binding = null;
     }
 }
+
 

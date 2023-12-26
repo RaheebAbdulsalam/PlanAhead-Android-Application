@@ -11,4 +11,13 @@ public interface GetWeather {
             @Query("lon") double longitude,
             @Query("appid") String apiKey
     );
+
+
+    ///////////////////////////////////Forecast////////////////////////////////////
+    @GET("forecast")
+    Call<Forecast> getWeatherForecast(
+            @Query("lat") double latitude,
+            @Query("lon") double longitude,
+            @Query("appid") String apiKey
+    );
 }

@@ -47,4 +47,13 @@ public class EventViewModel extends AndroidViewModel {
         return eventRepository.searchEventsByTitle(title);
     }
 
+    //Method to get all dates fot events
+    public LiveData<List<Event>> getAllEventsByDate() {
+        return eventRepository.getAllEventsByDate();
+    }
+
+    public LiveData<List<Event>> getAllEventsByDateDescending() {
+        return eventRepository.getAllEventsByDateDescending();
+    }
+
 }

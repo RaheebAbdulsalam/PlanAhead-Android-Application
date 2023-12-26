@@ -56,4 +56,13 @@ public class EventRepository {
     public LiveData<List<Event>> searchEventsByTitle(String title) {
         return eventsDao.searchEventsByTitle("%" + title + "%");
     }
+
+
+    public LiveData<List<Event>> getAllEventsByDate(){
+        return eventsDao.getAllEventsByDate();
+    }
+
+    LiveData<List<Event>> getAllEventsByDateDescending() {
+        return eventsDao.getAllEventsByDateDescending();
+    }
 }

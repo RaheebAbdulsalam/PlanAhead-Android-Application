@@ -7,6 +7,19 @@
     android:padding="30dp"
     tools:context=".AddEventActivity">
 
+
+    <TextView
+        android:id="@+id/create_event_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_new_event"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <!-- Title Section -->
     <TextView
         android:id="@+id/title_label"
@@ -19,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/create_event_label" />
 
     <!-- Date and Time Section -->
 
@@ -62,7 +75,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_label">
 
-        <!-- Replace EditText with Button for Date -->
+        <!-- Date and Time -->
         <Button
             android:id="@+id/date_button"
             android:layout_width="0dp"
@@ -72,9 +85,9 @@
             android:minHeight="48dp"
             android:onClick="onDateButtonClick"
             android:text="@string/hint_event_date"
+            android:drawableLeft="@drawable/ic_date"
             tools:ignore="VisualLintButtonSize" />
 
-        <!-- Replace EditText with Button for Time -->
         <Button
             android:id="@+id/time_button"
             android:layout_width="0dp"
@@ -84,6 +97,7 @@
             android:minHeight="48dp"
             android:onClick="onTimeButtonClick"
             android:text="@string/hint_event_time"
+            android:drawableLeft="@drawable/ic_time"
             tools:ignore="VisualLintButtonSize" />
     </LinearLayout>
 
@@ -184,12 +198,14 @@
     <!-- Save Button -->
     <Button
         android:id="@+id/save_button"
-        android:layout_width="284dp"
-        android:layout_height="70dp"
+        android:layout_width="124dp"
+        android:layout_height="65dp"
         android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_save"
         android:text="@string/button_save"
         android:textAllCaps="false"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notes_input"

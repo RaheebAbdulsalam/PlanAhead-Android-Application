@@ -3,28 +3,17 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication.weather;
 import java.util.List;
 
 public class WeatherResponse {
-    public Coord coord;
+
     public List<Weather> weather;
     public String base;
     public Main main;
     public int visibility;
-    public Wind wind;
-    public Rain rain;
-    public Clouds clouds;
     public long dt;
     public Sys sys;
     public int timezone;
     public int id;
     public String name;
     public int cod;
-
-    public Coord getCoord() {
-        return coord;
-    }
-
-    public void setCoord(Coord coord) {
-        this.coord = coord;
-    }
 
     public List<Weather> getWeather() {
         return weather;
@@ -56,30 +45,6 @@ public class WeatherResponse {
 
     public void setVisibility(int visibility) {
         this.visibility = visibility;
-    }
-
-    public Wind getWind() {
-        return wind;
-    }
-
-    public void setWind(Wind wind) {
-        this.wind = wind;
-    }
-
-    public Rain getRain() {
-        return rain;
-    }
-
-    public void setRain(Rain rain) {
-        this.rain = rain;
-    }
-
-    public Clouds getClouds() {
-        return clouds;
-    }
-
-    public void setClouds(Clouds clouds) {
-        this.clouds = clouds;
     }
 
     public long getDt() {

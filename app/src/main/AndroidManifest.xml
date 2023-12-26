@@ -26,7 +26,7 @@
         <activity
             android:name=".AddEventActivity"
             android:exported="false"
-            android:label="Add Event"
+            android:label="New Event"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".splash_screen.SplashActivity"

@@ -2,7 +2,6 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication.weather;
 
 public class Weather {
     public int id;
-    public String main;
     public String description;
     public String icon;
 
@@ -12,14 +11,6 @@ public class Weather {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getMain() {
-        return main;
-    }
-
-    public void setMain(String main) {
-        this.main = main;
     }
 
     public String getDescription() {

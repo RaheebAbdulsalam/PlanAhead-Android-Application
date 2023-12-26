@@ -22,4 +22,8 @@ public class WeatherRepository {
         return weatherService.getCurrentWeather(latitude, longitude, apiKey);
     }
 
+    public Call<Forecast> getWeatherForecast(double latitude, double longitude, String apiKey) {
+        return weatherService.getWeatherForecast(latitude, longitude, apiKey);
+    }
+
 }

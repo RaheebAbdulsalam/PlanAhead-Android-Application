@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_navigation_weather_to_addEventActivity"
             app:destination="@id/addEventActivity" />
+        <action
+            android:id="@+id/action_navigation_weather_to_forecastFragment"
+            app:destination="@id/forecastFragment" />
     </fragment>
 
     <activity
@@ -63,6 +66,11 @@
         android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.UpdateEventActivity"
         android:label="activity_update_event"
         tools:layout="@layout/activity_update_event" />
+    <fragment
+        android:id="@+id/forecastFragment"
+        android:name="uk.ac.aston.cs3mdd.planaheadmobileapplication.ForecastFragment"
+        android:label="fragment_forecast"
+        tools:layout="@layout/fragment_forecast" />
 
 
 </navigation>

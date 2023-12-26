@@ -22,7 +22,7 @@
         android:layout_marginTop="16dp"
         android:gravity="center"/>
 
-    <!-- Linear layout for search bar -->
+    <!-- Search bar and sorting -->
     <LinearLayout
         android:id="@+id/searchBarLayout"
         android:layout_width="0dp"
@@ -53,6 +53,21 @@
             tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize"
             android:inputType="textPersonName"
             android:importantForAutofill="no" />
+
+        <!-- Spinner for sorting options -->
+        <Spinner
+            android:id="@+id/sortSpinner"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_sort"
+            android:entries="@array/sort_options"
+            app:layout_constraintTop_toTopOf="@id/searchBarLayout"
+            app:layout_constraintStart_toEndOf="@id/editTextSearch"
+            tools:ignore="TouchTargetSizeCheck,TextSizeCheck,VisualLintBounds" />
+
     </LinearLayout>
 
     <!-- TextView for displaying a message when there are no events -->
@@ -70,7 +85,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="invisible"
         android:gravity="center"/>
-
 
     <!-- RecyclerView for displaying events -->
     <androidx.recyclerview.widget.RecyclerView

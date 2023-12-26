@@ -36,4 +36,10 @@ public interface EventsDao {
     // A method to search for events in the events_table based on a partial title match and return the results as LiveData
     @Query("SELECT * FROM events_table WHERE title LIKE :title")
     LiveData<List<Event>> searchEventsByTitle(String title);
+
+    @Query("SELECT * FROM events_table ORDER BY date ASC")
+    LiveData<List<Event>> getAllEventsByDate();
+
+    @Query("SELECT * FROM events_table ORDER BY date DESC")
+    LiveData<List<Event>> getAllEventsByDateDescending();
 }

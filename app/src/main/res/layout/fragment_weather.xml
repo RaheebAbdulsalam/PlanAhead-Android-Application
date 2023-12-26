@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,9 +12,9 @@
         android:layout_marginStart="0dp"
         android:orientation="vertical"
         android:paddingStart="16dp"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         android:paddingEnd="16dp"
-        tools:ignore="UselessParent">
+        tools:ignore="UselessParent,TextSizeCheck">
 
         <!-- Search and Clear Buttons -->
         <LinearLayout
@@ -21,50 +22,79 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/searchEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:autofillHints="Address"
-                    android:hint="@string/event_weather_editText"
-                    android:inputType="textPostalAddress"
-                    android:minHeight="48dp"
-                    tools:ignore="NestedWeights,VisualLintTextFieldSize" />
+            <EditText
+                android:id="@+id/searchEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="Address"
+                android:hint="@string/event_weather_editText"
+                android:inputType="textPostalAddress"
+                android:minHeight="48dp"
+                tools:ignore="NestedWeights,VisualLintTextFieldSize" />
 
-                <Button
-                    android:id="@+id/clearButton"
-                    android:layout_width="48dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/white"
-                    android:text="@string/clear_search" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/clearButton"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:text="@string/clear_search"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
 
-        <!-- Search Button -->
-
-        <Button
-            android:id="@+id/searchButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/buttonsLayout"
+            android:layout_width="347dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="10dp"
-            android:text="@string/check_weather"
-            tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
+            android:layout_marginTop="16dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+            <!-- Use Current Location Button -->
+            <Button
+                android:id="@+id/useCurrentLocationButton"
+                android:layout_width="167dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:drawableLeft="@drawable/ic_location"
+                android:text="@string/use_current_location"
+                tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
+
+            <!-- Search Button -->
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:drawableLeft="@drawable/ic_search_white"
+                android:text="@string/check_weather"
+                tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/weatherInfoLayout"
-            android:layout_width="379dp"
-            android:layout_height="0dp"
+            android:layout_width="376dp"
+            android:layout_height="202dp"
             android:layout_marginTop="20dp"
             android:layout_weight="1"
             android:background="@drawable/light_blue"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/dateTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/cityNameTextView"
@@ -84,15 +114,30 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/white"
                 android:textSize="30sp" />
-
-            <ImageView
-                android:id="@+id/weatherIconImageView"
-                android:layout_width="140dp"
-                android:layout_height="141dp"
+            <!--Min and Max temp-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:contentDescription="@string/weather_icon"
-                tools:ignore="ImageContrastCheck" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tempMinTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tempMaxTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/descriptionTextView"
@@ -103,44 +148,28 @@
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/dateTimeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/windTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/weatherIconImageView"
+                android:layout_width="140dp"
+                android:layout_height="130dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:contentDescription="@string/weather_icon"
+                tools:ignore="ImageContrastCheck,VisualLintBounds" />
 
-            <TextView
-                android:id="@+id/sunriseTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/sunsetTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
 
         </LinearLayout>
 
+        <!-- RecyclerView for Forecast -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/forecastRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="16dp"
+            android:padding="16dp" />
+
     </LinearLayout>
+
 
 </RelativeLayout>

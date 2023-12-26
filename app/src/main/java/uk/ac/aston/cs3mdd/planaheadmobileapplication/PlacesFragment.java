@@ -171,35 +171,7 @@ public class PlacesFragment extends Fragment {
 
     //Method to use the user current location and adding it to the search bar
     private void useCurrentLocation() {
-        // Check if the location data is available in the ViewModel
-        Location currentLocation = locationViewModel.getCurrentLocation().getValue();
-        if (currentLocation != null) {
-            // Use Geocoder to get the address from latitude and longitude
-            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
-            List<Address> addresses;
-            try {
-                addresses = geocoder.getFromLocation(
-                        currentLocation.getLatitude(),
-                        currentLocation.getLongitude(),
-                        1
-                );
-                if (addresses != null && !addresses.isEmpty()) {
-                    Address address = addresses.get(0);
-                    // Get the formatted address
-                    String addressFormatted = address.getAddressLine(0) + "\n";
-                    // Set the current address in the search bar
-                    searchLocationEditText.setText(addressFormatted);
-                } else {
-                    Toast.makeText(getContext(), R.string.address_not_found_for_current_location, Toast.LENGTH_SHORT).show();
-                }
-            } catch (IOException e) {
-                Toast.makeText(getContext(), R.string.error_retrieving_address + e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e(MainActivity.TAG, "Error getting address\n"+e.getMessage());
-            }
-        } else {
-            Toast.makeText(getContext(), R.string.current_location_not_available, Toast.LENGTH_SHORT).show();
-        }
-
+        locationViewModel.useCurrentLocation(searchLocationEditText, requireContext());
     }
 
     @Override
