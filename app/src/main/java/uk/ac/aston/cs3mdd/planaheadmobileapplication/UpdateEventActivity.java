@@ -34,6 +34,7 @@ public class UpdateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_event);
 
+        // UI elements
         titleInput = findViewById(R.id.title_input_update);
         dateButton = findViewById(R.id.date_button_update);
         timeButton = findViewById(R.id.time_button_update);
@@ -44,6 +45,7 @@ public class UpdateEventActivity extends AppCompatActivity {
         updateButton = findViewById(R.id.update_button);
         deleteButton = findViewById(R.id.delete_button);
 
+        //ViewModel
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
         // Retrieve data from Intent
@@ -58,11 +60,11 @@ public class UpdateEventActivity extends AppCompatActivity {
             finish();
         }
 
-        // Setting click listeners for date and time buttons
+        // date and time buttons
         dateButton.setOnClickListener(v -> showDatePickerDialog());
         timeButton.setOnClickListener(v -> showTimePickerDialog());
 
-        // Setting click listeners for update and delete buttons
+        // update and delete buttons
         updateButton.setOnClickListener(v -> updateEvent());
         deleteButton.setOnClickListener(v -> deleteEvent());
     }
@@ -86,7 +88,7 @@ public class UpdateEventActivity extends AppCompatActivity {
     // Method to update the event in the database
     private void updateEvent() {
         // Check if the title is empty; if yes, do not save
-        String eventTitle=titleInput.getText().toString();
+        String eventTitle = titleInput.getText().toString();
         String eventPostcode = postcodeInput.getText().toString();
 
         if (eventTitle.isEmpty()) {
@@ -98,31 +100,31 @@ public class UpdateEventActivity extends AppCompatActivity {
             return;
         }
 
-            // Retrieve values from EditText fields
-            String title = titleInput.getText().toString();
-            String date = dateButton.getText().toString();
-            String time = timeButton.getText().toString();
-            String address = addressInput.getText().toString();
-            String postcode = postcodeInput.getText().toString();
-            String city = cityInput.getText().toString();
-            String notes = notesInput.getText().toString();
+        // Retrieve values from EditText fields
+        String title = titleInput.getText().toString();
+        String date = dateButton.getText().toString();
+        String time = timeButton.getText().toString();
+        String address = addressInput.getText().toString();
+        String postcode = postcodeInput.getText().toString();
+        String city = cityInput.getText().toString();
+        String notes = notesInput.getText().toString();
 
-            // Get the eventId from the Intent
-            int eventId = getIntent().getIntExtra("EVENT_ID", -1);
+        // Get the eventId from the Intent
+        int eventId = getIntent().getIntExtra("EVENT_ID", -1);
 
-            // Create an Event object with the updated values
-            Event updatedEvent = new Event(title, date, time, address, postcode, city, notes);
-            updatedEvent.setId(eventId); // Set the ID to ensure it's recognized as an existing event
+        // Create an Event object with the updated values
+        Event updatedEvent = new Event(title, date, time, address, postcode, city, notes);
+        updatedEvent.setId(eventId); // Set the ID to ensure it's recognized as an existing event
 
-            // Call the update method in the ViewModel to update the event in the database
-            eventViewModel.update(updatedEvent);
+        // Call the update method in the ViewModel to update the event in the database
+        eventViewModel.update(updatedEvent);
 
-            // Provide feedback
-            Toast.makeText(this, R.string.event_updated_successfully, Toast.LENGTH_SHORT).show();
+        // Provide feedback
+        Toast.makeText(this, R.string.event_updated_successfully, Toast.LENGTH_SHORT).show();
 
-            // Set result and finish the activity
-            setResult(RESULT_OK);
-        }
+        // Set result and finish the activity
+        setResult(RESULT_OK);
+    }
 
 
     // Method to delete the event from the database with a confirmation dialog

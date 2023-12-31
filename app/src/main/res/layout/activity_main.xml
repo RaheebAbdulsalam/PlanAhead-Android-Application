@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-   >
+    tools:context=".MainActivity">
 
     <FrameLayout
+        android:id="@+id/frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/frame_layout"/>
+        android:layout_height="match_parent" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:fabCradleMargin="20dp"
-        app:fabCradleVerticalOffset="10dp"
-        app:fabCradleRoundedCornerRadius="20dp"
         android:layout_gravity="bottom"
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="10dp"
+        app:fabCradleVerticalOffset="10dp"
         tools:ignore="VisualLintBottomAppBar">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,9 +27,9 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
-            app:menu="@menu/bottom_nav_menu"
             app:elevation="0dp"
             app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav_menu"
             tools:ignore="VisualLintBottomNav" />
 
     </com.google.android.material.bottomappbar.BottomAppBar>
@@ -45,6 +43,7 @@
         app:navGraph="@navigation/nav_graph" />
 
 
+    <!-- Floating action button-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add"
         android:layout_width="wrap_content"
@@ -52,11 +51,9 @@
         android:contentDescription="@string/add"
         android:foregroundTint="@color/white"
         android:src="@drawable/ic_add"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/colorPrimary"
         app:layout_anchor="@id/bottomAppBar"
         app:tint="@color/white"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="22dp"
         tools:ignore="RedundantDescriptionCheck" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

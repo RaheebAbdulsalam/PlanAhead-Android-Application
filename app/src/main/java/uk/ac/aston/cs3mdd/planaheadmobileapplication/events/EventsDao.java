@@ -37,6 +37,7 @@ public interface EventsDao {
     @Query("SELECT * FROM events_table WHERE title LIKE :title")
     LiveData<List<Event>> searchEventsByTitle(String title);
 
+    //A method to get all events by their date
     @Query("SELECT * FROM events_table ORDER BY date ASC")
     LiveData<List<Event>> getAllEventsByDate();
 

@@ -30,7 +30,7 @@ public class HomeFragment extends Fragment implements EventAdapter.EventClickCal
     private EventAdapter eventAdapter;
 
     @Override
-    public View onCreateView( @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -38,15 +38,15 @@ public class HomeFragment extends Fragment implements EventAdapter.EventClickCal
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize RecyclerView
+        // RecyclerView
         RecyclerView recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Initialize EventAdapter with the click callback
+        // EventAdapter
         eventAdapter = new EventAdapter(new EventAdapter.EventDiff(), this);
         recyclerView.setAdapter(eventAdapter);
 
-        // Initialize EventViewModel
+        // EventViewModel
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
         // Observe LiveData and update RecyclerView
@@ -70,11 +70,13 @@ public class HomeFragment extends Fragment implements EventAdapter.EventClickCal
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int before, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int after) {
                 String searchQuery = charSequence.toString().trim();
                 searchEvents(searchQuery);
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
             }
@@ -91,7 +93,7 @@ public class HomeFragment extends Fragment implements EventAdapter.EventClickCal
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortSpinner.setAdapter(adapter);
 
-        // Set a listener for item selections
+        // Set a listener for item selections when selecting an event
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -106,6 +108,7 @@ public class HomeFragment extends Fragment implements EventAdapter.EventClickCal
                     });
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
@@ -113,6 +116,7 @@ public class HomeFragment extends Fragment implements EventAdapter.EventClickCal
 
     }
 
+    // A method to search for events
     private void searchEvents(String title) {
         eventViewModel.searchEventsByTitle(title).observe(this, events -> {
             eventAdapter.submitList(events);

@@ -15,6 +15,9 @@
     <string name="map_view">Map View</string>
     <string name="weather_forecast">Weather Forecast</string>
 
+    <!-- Others -->
+    <string name="clear_search">X</string>
+    <string name="splash_image">Splash Image</string>
     <string name="welcome_message">Welcome to PerfectDay Planner👋🏻 ! Explore your saved events below</string>
 
 
@@ -71,6 +74,5 @@
     <string name="coordinates_null">Coordinates are null for the given city name</string>
     <string name="empty_city_name">Please enter an address.</string>
 
-    <string name="clear_search">X</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package uk.ac.aston.cs3mdd.planaheadmobileapplication.places;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,9 +42,10 @@ public class PlaceListAdapter extends
         MyPlace myPlace = mPlaceList.get(position);
         holder.place = myPlace;
         String name = myPlace.getName();
+        float rating = myPlace.getRating();
         holder.placeNameView.setText(name);
-//        String icon = myPlace.getIcon();
-//        Picasso.get().load(icon).into(holder.placeIcon);
+        holder.placeRatingView.setText("     " + rating);
+
     }
 
     @Override
@@ -58,14 +60,14 @@ public class PlaceListAdapter extends
 
     class PlaceViewHolder extends RecyclerView.ViewHolder {
         public final TextView placeNameView;
-//        public final ImageView placeIcon;
+        public final TextView placeRatingView;
         final PlaceListAdapter mAdapter;
         public MyPlace place;
 
         public PlaceViewHolder(@NonNull View itemView, PlaceListAdapter adapter) {
             super(itemView);
             placeNameView = itemView.findViewById(R.id.placename);
-//            this.placeIcon = itemView.findViewById(R.id.placeicon);
+            placeRatingView = itemView.findViewById(R.id.placeRating);
             this.mAdapter = adapter;
         }
     }

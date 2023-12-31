@@ -10,7 +10,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,7 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -31,7 +29,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -77,13 +74,10 @@ public class MainActivity extends AppCompatActivity {
 
         // FloatingActionButton to add an Event
         add_button = findViewById(R.id.add);
-        add_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Navigate to AddEventFragment when FloatingActionButton is clicked
-                Intent intent = new Intent(MainActivity.this, AddEventActivity.class);
-                startActivity(intent);
-            }
+        add_button.setOnClickListener(view -> {
+            // Navigate to AddEventFragment when FloatingActionButton is clicked
+            Intent intent = new Intent(MainActivity.this, AddEventActivity.class);
+            startActivity(intent);
         });
 
         // Initialising Places API keys
@@ -94,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Method to update the action bar when switching pages
     private void updateActionBarTitle(int destinationId) {
         if (destinationId == R.id.navigation_home) {
             Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.home);
@@ -106,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    // A method to get the api key for google places
     private void getPlacesApiKeys() {
         try {
             ApplicationInfo applicationInfo =
@@ -122,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //----------------// Following methods are used to get the device location (GPS) and to handle location permissions //----------------------//
-                          //Note: Most Code have been taken from week(3) lab//
+    //Note: Most Code have been taken from week(3) lab//
     private void setUpLocationServices() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         model = new ViewModelProvider(this).get(LocationViewModel.class);
@@ -192,16 +187,13 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         fusedLocationClient.getCurrentLocation(PRIORITY_BALANCED_POWER_ACCURACY, null)
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            Log.i(TAG, "We got a location: (" + location.getLatitude() +
-                                    ", " + location.getLongitude() + ")");
-                            model.setCurrentLocation(location);
-                        } else {
-                            Log.i(TAG, "We failed to get a last location");
-                        }
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        Log.i(TAG, "We got a location: (" + location.getLatitude() +
+                                ", " + location.getLongitude() + ")");
+                        model.setCurrentLocation(location);
+                    } else {
+                        Log.i(TAG, "We failed to get a last location");
                     }
                 });
     }

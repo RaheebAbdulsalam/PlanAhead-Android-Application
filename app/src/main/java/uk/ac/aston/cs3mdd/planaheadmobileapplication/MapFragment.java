@@ -59,8 +59,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         mapSearch = binding.inputSearch;
-        searchIcon=binding.icMagnify;
-
+        searchIcon = binding.icMagnify;
     }
 
     @Override
@@ -93,13 +92,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     LatLng placeLatLng = new LatLng(place.getLatitude(), place.getLongitude());
                     //Change the marker plot color
                     BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
-                    mGoogleMap.addMarker(new MarkerOptions().position(placeLatLng).title(place.getName()) .icon(bitmapDescriptor));
+                    mGoogleMap.addMarker(new MarkerOptions().position(placeLatLng).title(place.getName()).icon(bitmapDescriptor));
                 }
             }
         });
     }
 
-    //Initialising search functionality for the map
+    //search functionality for the map
     private void searchAddress() {
         // Set OnClickListener for the search icon
         searchIcon.setOnClickListener(v -> searchAndMoveToLocation());

@@ -17,12 +17,13 @@ public class WeatherViewModel extends ViewModel {
 
     MutableLiveData<WeatherResponse> weatherData;
     private final WeatherRepository weatherRepository;
+
     public WeatherViewModel() {
         weatherRepository = new WeatherRepository();
     }
 
     public LiveData<WeatherResponse> getCurrentWeather(double latitude, double longitude, String apiKey) {
-         weatherData = new MutableLiveData<>();
+        weatherData = new MutableLiveData<>();
 
         weatherRepository.getCurrentWeather(latitude, longitude, apiKey).enqueue(new Callback<WeatherResponse>() {
             @Override
@@ -30,18 +31,15 @@ public class WeatherViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     weatherData.setValue(response.body());
                 } else {
-                    // Handle error
                     Log.e(TAG, "Failed to fetch current weather: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<WeatherResponse> call, @NonNull Throwable t) {
-                // Handle failure
                 Log.e(TAG, "Failed to fetch current weather", t);
             }
         });
-
         return weatherData;
     }
 
@@ -54,14 +52,12 @@ public class WeatherViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     forecastData.setValue(response.body());
                 } else {
-                    // Handle error
                     Log.e(TAG, "Failed to fetch weather forecast: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Forecast> call, @NonNull Throwable t) {
-                // Handle failure
                 Log.e(TAG, "Failed to fetch weather forecast", t);
             }
         });

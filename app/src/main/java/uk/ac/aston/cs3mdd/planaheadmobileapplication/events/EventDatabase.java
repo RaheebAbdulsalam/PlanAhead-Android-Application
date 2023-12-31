@@ -12,7 +12,8 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {Event.class}, version = 1, exportSchema = false)
 public abstract class EventDatabase extends RoomDatabase {
-    // Declare an abstract method to get the DAO (Data Access Object)
+
+    // An abstract method to get the DAO (Data Access Object)
     public abstract EventsDao eventDao();
 
     // Singleton pattern to ensure only one instance of the database is created
@@ -29,18 +30,20 @@ public abstract class EventDatabase extends RoomDatabase {
     static EventDatabase getDatabase(final Context context) {
         // Check if an instance already exists
         if (INSTANCE == null) {
-            // Synchronize to prevent multiple threads from creating separate instances simultaneously
+            // Synchronize to prevent multiple threads from creating separate instances
             synchronized (EventDatabase.class) {
                 // Double-check for null inside the synchronized block
                 if (INSTANCE == null) {
-                    // Create a new database instance using Room's databaseBuilder method
+                    // Create a new database instance
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     EventDatabase.class, "event_database")
                             .build();
                 }
             }
         }
-        // Return the existing or newly created instance
         return INSTANCE;
     }
+
+
+
 }

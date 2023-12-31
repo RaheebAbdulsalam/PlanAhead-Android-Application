@@ -11,13 +11,15 @@ public class EventRepository {
     private final LiveData<List<Event>> allEvents;
 
     EventRepository(Application application) {
-        // Get an instance of the Room EventDatabase using the application context
+        // Get an instance of the EventDatabase using the application context
         EventDatabase db = EventDatabase.getDatabase(application);
-        // Obtain the EventsDao from the Room EventDatabase
+        // Obtain the EventsDao from EventDatabase
         eventsDao = db.eventDao();
         // Retrieve LiveData of all events from the DAO
         allEvents = eventsDao.getAllEvents();
     }
+
+
 
     // Method to provide access to the LiveData list of all events
     public LiveData<List<Event>> getAllEvents() {
@@ -27,7 +29,7 @@ public class EventRepository {
     // Method to insert an event into the database using a background thread
     public void insertEvent(Event event) {
         // Use a background thread from the ExecutorService to perform the insertion
-       EventDatabase.databaseWriteExecutor.execute(() -> {
+        EventDatabase.databaseWriteExecutor.execute(() -> {
             eventsDao.insertEvent(event);
         });
     }
@@ -40,7 +42,7 @@ public class EventRepository {
     // Method to update an existing event in the database using a background thread
     public void update(Event event) {
         // A background thread from the ExecutorService is used to perform the update
-       EventDatabase.databaseWriteExecutor.execute(() -> {
+        EventDatabase.databaseWriteExecutor.execute(() -> {
             eventsDao.updateEvent(event);
         });
     }
@@ -58,7 +60,8 @@ public class EventRepository {
     }
 
 
-    public LiveData<List<Event>> getAllEventsByDate(){
+    // Method to get all events b their dates
+    public LiveData<List<Event>> getAllEventsByDate() {
         return eventsDao.getAllEventsByDate();
     }
 

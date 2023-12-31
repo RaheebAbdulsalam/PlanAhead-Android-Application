@@ -20,7 +20,7 @@ public class EventAdapter extends ListAdapter<Event, EventAdapter.EventViewHolde
         void onItemClick(Event event);
     }
 
-    // Constructor for the EventAdapter, taking a DiffUtil.ItemCallback and an EventClickCallback
+    // Constructor for the EventAdapter
     public EventAdapter(@NonNull DiffUtil.ItemCallback<Event> diffCallback, EventClickCallback eventClickCallback) {
         super(diffCallback);
         this.eventClickCallback = eventClickCallback;
@@ -47,12 +47,10 @@ public class EventAdapter extends ListAdapter<Event, EventAdapter.EventViewHolde
         });
     }
 
-    // EventViewHolder class represents individual items in the RecyclerView
+    // EventViewHolder class to represent individual items in the RecyclerView
     static class EventViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView event_title_txt, event_date_txt, event_time_txt, event_address_txt, event_postcode_txt, event_city_txt, event_notes_txt;
-
-        // Constructor for EventViewHolder, initializes UI elements
         private EventViewHolder(@NonNull View itemView) {
             super(itemView);
             event_title_txt = itemView.findViewById(R.id.event_title_txt);

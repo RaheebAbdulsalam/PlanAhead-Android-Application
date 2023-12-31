@@ -2,9 +2,7 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication;
 
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +40,7 @@ public class PlacesFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PlaceListAdapter mAdapter;
     private EditText searchLocationEditText;
-    private Button searchButton, useCurrentLocationButton,clearButton;
+    private Button searchButton, useCurrentLocationButton, clearButton;
     private GetNearbyPlaces service;
     private Retrofit retrofit;
     private Spinner placeTypeSpinner;
@@ -59,10 +57,10 @@ public class PlacesFragment extends Fragment {
 
         View view = binding.getRoot();
 
-        // Initialize views
+        // UI elements
         searchLocationEditText = binding.searchLocationEditText;
         searchButton = binding.searchButton;
-        clearButton=binding.clearButton;
+        clearButton = binding.clearButton;
         placeTypeSpinner = binding.placeTypeSpinner;
 
         // Set up the Spinner with the array of place types
@@ -77,11 +75,10 @@ public class PlacesFragment extends Fragment {
 
         //clear search bar
         clearButton.setOnClickListener(v -> {
-            // Clear the search bar
             searchLocationEditText.getText().clear();
         });
 
-        // Set onClickListener for the search button
+        // search button
         searchButton.setOnClickListener(v -> {
             // Get the user's input
             String location = searchLocationEditText.getText().toString();
@@ -117,7 +114,7 @@ public class PlacesFragment extends Fragment {
         final Observer<List<MyPlace>> userListObserver = new Observer<List<MyPlace>>() {
             @Override
             public void onChanged(@Nullable final List<MyPlace> placeList) {
-                // Update the UI, in this case, a Toast.
+                // Update the UI
                 assert placeList != null;
                 Toast.makeText(getContext(),
                         "We got a list of " + placeList.size() + " places",
@@ -126,7 +123,7 @@ public class PlacesFragment extends Fragment {
             }
         };
 
-        // Get a handle to the RecyclerView.
+        //RecyclerView.
         mRecyclerView = view.findViewById(R.id.recyclerview);
         // Create an adapter and supply the data to be displayed.
         mAdapter = new PlaceListAdapter(getContext(), viewModel.getAllPlaces().getValue());
@@ -138,6 +135,7 @@ public class PlacesFragment extends Fragment {
         viewModel.getAllPlaces().observe(getViewLifecycleOwner(), userListObserver);
     }
 
+    // A method to perform nearby places search
     private void performSearch(String location) {
         viewModel.getAllPlaces().getValue().clear();
         // Get the selected place type from the Spinner
@@ -158,7 +156,7 @@ public class PlacesFragment extends Fragment {
                 viewModel.requestNearbyPlaces(new PlacesRepository(service), latitude + "," + longitude, 5000, selectedPlaceType);
 
                 // Display the formatted address in the UI
-                String addressFormatted = address.getAddressLine(0) + "\n" ;
+                String addressFormatted = address.getAddressLine(0) + "\n";
                 binding.searchLocationEditText.setText(addressFormatted);
             } else {
                 Toast.makeText(getContext(), R.string.no_places_found, Toast.LENGTH_SHORT).show();

@@ -16,14 +16,13 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp">
 
-        <!-- ConstraintLayout to organize child views -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/second_background"
+            android:background="@drawable/background"
             android:padding="16dp">
 
-            <!-- Event Title TextView -->
+            <!-- Event Title -->
             <TextView
                 android:id="@+id/event_title_txt"
                 android:layout_width="wrap_content"
@@ -34,19 +33,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Event Date TextView -->
+            <!-- Event Date -->
             <TextView
                 android:id="@+id/event_date_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/yellow"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_title_txt"
                 />
 
-            <!-- Event Time TextView -->
+            <!-- Event Time -->
             <TextView
                 android:id="@+id/event_time_txt"
                 android:layout_width="wrap_content"
@@ -54,11 +54,12 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="4dp"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/yellow"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_date_txt" />
 
-            <!-- Event Address TextView -->
+            <!-- Event Address -->
             <TextView
                 android:id="@+id/event_address_txt"
                 android:layout_width="wrap_content"
@@ -69,7 +70,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_time_txt" />
 
-            <!-- Event City TextView-->
+            <!-- Event City -->
             <TextView
                 android:id="@+id/event_postcode_txt"
                 android:layout_width="wrap_content"
@@ -81,7 +82,7 @@
 
                 app:layout_constraintTop_toBottomOf="@+id/event_address_txt" />
 
-            <!-- Event Postcode TextView -->
+            <!-- Event Postcode -->
             <TextView
                 android:id="@+id/event_city_txt"
                 android:layout_width="wrap_content"
@@ -93,7 +94,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_address_txt" />
 
-            <!-- Event Notes TextView -->
+            <!-- Event Notes -->
             <TextView
                 android:id="@+id/event_notes_txt"
                 android:layout_width="wrap_content"

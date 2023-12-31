@@ -10,9 +10,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.Event;
 import uk.ac.aston.cs3mdd.planaheadmobileapplication.events.EventViewModel;
 
@@ -26,7 +28,7 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        // Initialising UI elements
+        // UI elements
         title_input = findViewById(R.id.title_input);
         date_button = findViewById(R.id.date_button);
         time_button = findViewById(R.id.time_button);
@@ -35,22 +37,24 @@ public class AddEventActivity extends AppCompatActivity {
         city_input = findViewById(R.id.city_input);
         notes_input = findViewById(R.id.notes_input);
 
-        // Initialize save_button
+        // save_button
         save_button = findViewById(R.id.save_button);
 
-        // Initialize EventRepository
+        // EventRepository
         eventViewModel = new EventViewModel(getApplication());
 
-        // Set click listeners for date and time buttons
+        // date and time buttons
         date_button.setOnClickListener(v -> showDatePickerDialog());
         time_button.setOnClickListener(v -> showTimePickerDialog());
 
+        //save button
         save_button.setOnClickListener(view -> saveEvent());
     }
 
+    // A method to save an event
     private void saveEvent() {
         // Check if the title is empty; if yes, do not save
-        String eventTitle=title_input.getText().toString();
+        String eventTitle = title_input.getText().toString();
         String eventPostcode = postcode_input.getText().toString();
 
         if (eventTitle.isEmpty()) {
@@ -62,25 +66,25 @@ public class AddEventActivity extends AppCompatActivity {
             return;
         }
 
-            // Retrieve values from EditText fields
-            String title = title_input.getText().toString();
-            String date = date_button.getText().toString();
-            String time = time_button.getText().toString();
-            String address = address_input.getText().toString();
-            String postcode = postcode_input.getText().toString();
-            String city = city_input.getText().toString();
-            String notes = notes_input.getText().toString();
+        // Retrieve values from EditText fields
+        String title = title_input.getText().toString();
+        String date = date_button.getText().toString();
+        String time = time_button.getText().toString();
+        String address = address_input.getText().toString();
+        String postcode = postcode_input.getText().toString();
+        String city = city_input.getText().toString();
+        String notes = notes_input.getText().toString();
 
-            // Create an Event object
-            Event event = new Event(title, date, time, address, postcode, city, notes);
+        // Create an Event object
+        Event event = new Event(title, date, time, address, postcode, city, notes);
 
-            // Insert the event into the database using the repository
-            eventViewModel.insert(event);
+        // Insert the event into the database using the repository
+        eventViewModel.insert(event);
 
-            Toast.makeText(this, R.string.event_added_successfully, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.event_added_successfully, Toast.LENGTH_SHORT).show();
 
-            // Set the result to RESULT_OK
-            setResult(RESULT_OK);
+        // Set the result to RESULT_OK
+        setResult(RESULT_OK);
 
         // Finish the activity
         finish();

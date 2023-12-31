@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+//Retrofit interface for defining the API endpoint and parameters for fetching current weather and forecast for 5 days 3 hours
 public interface GetWeather {
     @GET("weather")
     Call<WeatherResponse> getCurrentWeather(
@@ -13,7 +14,6 @@ public interface GetWeather {
     );
 
 
-    ///////////////////////////////////Forecast////////////////////////////////////
     @GET("forecast")
     Call<Forecast> getWeatherForecast(
             @Query("lat") double latitude,

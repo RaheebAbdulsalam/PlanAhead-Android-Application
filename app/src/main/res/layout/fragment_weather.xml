@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:autofillHints="Address"
+                android:drawableLeft="@drawable/ic_search"
                 android:hint="@string/event_weather_editText"
                 android:inputType="textPostalAddress"
                 android:minHeight="48dp"
@@ -77,14 +78,14 @@
                 tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
         </LinearLayout>
 
-
+        <!-- Weather Data -->
         <LinearLayout
             android:id="@+id/weatherInfoLayout"
             android:layout_width="376dp"
             android:layout_height="202dp"
             android:layout_marginTop="20dp"
             android:layout_weight="1"
-            android:background="@drawable/light_blue"
+            android:background="@drawable/background"
             android:orientation="vertical">
 
             <TextView
@@ -114,6 +115,7 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/white"
                 android:textSize="30sp" />
+
             <!--Min and Max temp-->
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -136,7 +138,6 @@
                     android:layout_marginStart="5dp"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
-
             </LinearLayout>
 
             <TextView
@@ -148,11 +149,10 @@
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
-
             <ImageView
                 android:id="@+id/weatherIconImageView"
                 android:layout_width="140dp"
-                android:layout_height="130dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/weather_icon"
                 tools:ignore="ImageContrastCheck,VisualLintBounds" />
@@ -167,6 +167,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginTop="16dp"
+            android:background="@drawable/light_blue"
             android:padding="16dp" />
 
     </LinearLayout>

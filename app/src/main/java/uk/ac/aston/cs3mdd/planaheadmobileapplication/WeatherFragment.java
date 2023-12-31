@@ -61,7 +61,7 @@ public class WeatherFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        //UI elements
         cityNameTextView = binding.cityNameTextView;
         temperatureTextView = binding.temperatureTextView;
         descriptionTextView = binding.descriptionTextView;
@@ -126,7 +126,7 @@ public class WeatherFragment extends Fragment {
         weatherViewModel.getCurrentWeather(latitude, longitude, apiKey).observe(getViewLifecycleOwner(), weatherResponse -> {
             if (weatherResponse != null) {
                 // Display current weather data
-               displayCurrentWeatherData(weatherResponse);
+                displayCurrentWeatherData(weatherResponse);
 
                 // Fetch and display weather forecast
                 weatherViewModel.getWeatherForecast(latitude, longitude, apiKey).observe(getViewLifecycleOwner(), forecast -> {
@@ -199,6 +199,7 @@ public class WeatherFragment extends Fragment {
         }
     }
 
+    //a method to use current location
     private void useCurrentLocation() {
         locationViewModel.useCurrentLocation(searchEditText, requireContext());
     }

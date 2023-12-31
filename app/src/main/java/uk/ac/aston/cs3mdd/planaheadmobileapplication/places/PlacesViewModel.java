@@ -2,6 +2,7 @@ package uk.ac.aston.cs3mdd.planaheadmobileapplication.places;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -32,10 +33,9 @@ public class PlacesViewModel extends ViewModel {
     public void requestNearbyPlaces(PlacesRepository placesRepository, String loc, int radius, String type) {
         if (allPlaces.getValue().size() == 0) {
             Call<PlacesList> userCall = placesRepository.getNearbyPlaces(loc, radius, type);
-            Log.i(MainActivity.TAG, "Call: " + userCall.request().toString());
             userCall.enqueue(new Callback<PlacesList>() {
                 @Override
-                public void onResponse(Call<PlacesList> call, Response<PlacesList> response) {
+                public void onResponse(@NonNull Call<PlacesList> call, @NonNull Response<PlacesList> response) {
                     if (response.isSuccessful()) {
                         Log.i(MainActivity.TAG, "The response is " + response.body().toString());
                         addAll(response.body());
@@ -43,7 +43,7 @@ public class PlacesViewModel extends ViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<PlacesList> call, Throwable t) {
+                public void onFailure(@NonNull Call<PlacesList> call, @NonNull Throwable t) {
                     // show error message to user
                     Log.i(MainActivity.TAG, "Error: " + t.toString());
                 }
@@ -55,12 +55,10 @@ public class PlacesViewModel extends ViewModel {
 
     private void addAll(PlacesList list) {
         allPlaces.setValue(list.getResults());
-        Log.i("AJB", "Printing " + allPlaces.getValue().size() + " Places");
         for (MyPlace place : allPlaces.getValue()) {
             Log.i("AJB", place.toString());
         }
     }
-
 
 
 }
