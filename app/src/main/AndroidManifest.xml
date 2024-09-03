@@ -39,15 +39,15 @@
         <!-- Map API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBSBDw_fDYLYyCz7gYHyKXHkuqExx8dPHk" />
+            android:value="YOUR GOOGLE MAP API KEY" />
         <!-- Places API Key -->
         <meta-data
             android:name="PLACES.API_KEY"
-            android:value="AIzaSyDC4jRL8Mc8u5rbnMAhson1Kgkbj40wFfU" />
+            android:value="YOUR GOOGLE PLACES API KEY" />
         <!-- Weather API Key -->
         <meta-data
             android:name="WEATHER.API_KEY"
-            android:value="fd738b5141e2c31ce6f902442a67df3d" />
+            android:value="YOUR WEATHER API KEY" />
     </application>
 
 </manifest>
